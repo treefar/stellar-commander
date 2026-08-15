@@ -28,7 +28,7 @@ sandbox.Math.random = seededRandom;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-for (const f of ['core.js', 'audio.js', 'combat.js', 'hex.js', 'units.js', 'battle.js']) {
+for (const f of ['core.js', 'audio.js', 'combat.js', 'hex.js', 'units.js', 'progression.js', 'battle.js']) {
   vm.runInContext(fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'), sandbox, { filename: f });
 }
 vm.runInContext('UnitDB.init();', sandbox);

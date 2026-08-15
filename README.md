@@ -25,6 +25,8 @@ node tools/devserver.mjs
 
 **贏法**：佔領敵方全部工廠，或殲滅敵方全部單位。回合用完則比設施數量。
 
+標準戰局以約 15 分鐘為目標：依序完成四段作戰目標取得獎勵，讓存活機體靠戰歷升為 R1／R2／ACE；受損機體停在己方工廠，每回合會修復 20%。
+
 ---
 
 ## 專案結構
@@ -37,6 +39,7 @@ js/audio.js             Web Audio 合成音效與 BGM
 js/units.js             機體資料表
 js/hex.js               六角格數學（odd-r 尖頂）、地圖、ZOC、移動範圍
 js/combat.js            傷害公式（純函式）
+js/progression.js       四段作戰目標、戰歷升階、工廠維修（純函式）
 js/battle.js            即時 2D 戰鬥
 js/strategy.js          回合制戰略層
 js/main.js              狀態機：標題→設定→地圖→VS→戰鬥
@@ -56,7 +59,7 @@ node tests/run-tests.cjs
 node tests/balance.test.cjs
 ```
 
-前者驗六角格數學、地圖公平性、ZOC、傷害公式、機體表結構（46 項）。
+前者驗六角格數學、地圖公平性、ZOC、傷害公式、機體表結構與長線成長（58 項）。
 後者在 Node 用固定亂數種子跑模擬對戰，驗同階勝率與跨階壓制（22 項）。
 
 改過 `js/units.js` 或 `js/battle.js` 之後兩個都要跑。

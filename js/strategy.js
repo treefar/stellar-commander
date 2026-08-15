@@ -15,6 +15,7 @@ const Strat = {
   sel: null, reach: null, menu: null, msg: '', msgT: 0,
   anim: null, ai: null, tiles: null, blink: 0, pendingBattle: null,
   victory: null, skill: 0.5, battleSeconds: 60, uid: 1,
+  stats: null, operationIndex: 0, operationFlash: 0,
 
   init(opt) {
     opt = opt || {};
@@ -26,6 +27,11 @@ const Strat = {
     this.turn = 1; this.side = 'blue'; this.mode = 'map';
     this.sel = null; this.reach = null; this.menu = null; this.anim = null; this.ai = null;
     this.victory = null; this.uid = 1;
+    this.stats = {
+      blue: { battleWins: 0, kills: 0 },
+      red: { battleWins: 0, kills: 0 }
+    };
+    this.operationIndex = 0; this.operationFlash = 0;
     this.turnLimit = opt.turnLimit || 30;
     this.skill = opt.skill === undefined ? 0.5 : opt.skill;
     this.battleSeconds = opt.seconds || 60;
@@ -43,7 +49,8 @@ const Strat = {
     const d = UnitDB.get(defId);
     const u = {
       uid: this.uid++, id: defId, side, col, row,
-      hp: d.hp, mp: d.mp, acted: false, capturing: false, justBuilt: false
+      hp: d.hp, mp: d.mp, acted: false, capturing: false, justBuilt: false,
+      xp: 0, kills: 0
     };
     this.units.push(u);
     return u;
@@ -60,6 +67,7 @@ const Strat = {
   /* ---------- 回合 ---------- */
   startTurn(side, first) {
     this.side = side;
+    let notice = '';
     if (!first) {
       const cities = this.count(side, 'city'), facs = this.count(side, 'factory');
       this.money[side] += cities * INCOME_CITY + facs * INCOME_FACTORY;
@@ -68,11 +76,41 @@ const Strat = {
       for (let i = 0; i < TEC_STEPS.length; i++) if (this.tecPts[side] >= TEC_STEPS[i]) lv = i + 1;
       if (lv > this.tec[side]) { this.tec[side] = lv; if (side === 'blue') this.say(`TEC 提升到 ${lv} 級，解鎖新機體`); }
     }
+    let repaired = 0;
     for (const u of this.units) if (u.side === side) {
+      const c = this.cell(u.col, u.row);
+      const d = UnitDB.get(u.id);
+      const hp0 = u.hp;
+      u.hp = repairAtFactory(u.hp, d.hp, !!(c && c.fac === 'factory' && c.owner === side));
+      repaired += u.hp - hp0;
       u.acted = false; u.mp = UnitDB.get(u.id).mp; u.justBuilt = false;
     }
-    if (side === 'blue') { this.mode = 'map'; this.say(`第 ${this.turn} 回合 — 藍軍行動`); }
+    if (side === 'blue') {
+      notice = this.checkOperation();
+      this.mode = 'map';
+      this.say(notice || `第 ${this.turn} 回合 — 藍軍行動${repaired ? `　工廠維修 +${repaired}` : ''}`);
+    }
     else { this.mode = 'aiturn'; this.ai = { i: 0, wait: 20, phase: 'produce' }; }
+  },
+
+  operationState() {
+    return {
+      facilities: this.count('blue'),
+      battleWins: this.stats.blue.battleWins,
+      rankedUnits: this.units.filter(u => u.side === 'blue' && veteranRank(u.xp).id >= 2).length,
+      enemyFactoriesLost: Math.max(0, 2 - this.count('red', 'factory'))
+    };
+  },
+
+  checkOperation() {
+    if (this.operationIndex >= OPERATIONS.length) return '';
+    const p = operationProgress(this.operationIndex, this.operationState());
+    if (!p.done) return '';
+    this.money.blue += p.op.reward;
+    this.operationIndex++;
+    this.operationFlash = 240;
+    Sfx.ok();
+    return `作戰完成：${p.op.zh}　獎勵 ${p.op.reward}G`;
   },
 
   endTurn() {
@@ -131,6 +169,7 @@ const Strat = {
   /* ---------- 更新 ---------- */
   update() {
     this.blink++;
+    if (this.operationFlash > 0) this.operationFlash--;
     if (this.msgT > 0) this.msgT--;
     if (this.anim) { this.updateAnim(); return; }
     if (this.victory) return;
@@ -315,13 +354,23 @@ const Strat = {
 
   /** 戰鬥結束回寫 */
   applyBattle(res) {
+    const oldRanks = new Map();
+    for (const r of res.units) oldRanks.set(r.ref.uid, veteranRank(r.ref.xp).id);
     for (const r of res.units) {
       const u = r.ref;
+      u.kills = (u.kills || 0) + (r.kills || 0);
+      this.stats[u.side].kills += r.kills || 0;
       if (r.dead) {
         const i = this.units.indexOf(u);
         if (i >= 0) this.units.splice(i, 1);
-      } else u.hp = r.hp;
+      } else {
+        u.hp = r.hp;
+        u.xp = (u.xp || 0) + battleXp(r.kills || 0, true);
+        const rank = veteranRank(u.xp);
+        if (rank.id > (oldRanks.get(u.uid) || 0) && u.side === 'blue') this.say(`${UnitDB.get(u.id).name} 晉升為${rank.zh}`);
+      }
     }
+    if (res.result === 'blue' || res.result === 'red') this.stats[res.result].battleWins++;
     if (this.checkVictory()) return;
     if (this.side === 'red' && this.mode !== 'aiturn') this.mode = 'aiturn';
   },
@@ -420,10 +469,11 @@ const Strat = {
   /* ---------- 存讀檔 ---------- */
   save() {
     const data = {
-      v: 1, turn: this.turn, money: this.money, tec: this.tec, tecPts: this.tecPts,
+      v: 2, turn: this.turn, money: this.money, tec: this.tec, tecPts: this.tecPts,
       turnLimit: this.turnLimit, skill: this.skill, seconds: this.battleSeconds,
+      stats: this.stats, operationIndex: this.operationIndex,
       owners: this.cells.map(r => r.map(c => c.owner)),
-      units: this.units.map(u => ({ id: u.id, side: u.side, col: u.col, row: u.row, hp: u.hp }))
+      units: this.units.map(u => ({ id: u.id, side: u.side, col: u.col, row: u.row, hp: u.hp, xp: u.xp || 0, kills: u.kills || 0 }))
     };
     try { localStorage.setItem('stellar_commander_v1', JSON.stringify(data)); return true; }
     catch (e) { return false; }
@@ -435,9 +485,14 @@ const Strat = {
     if (!d) return false;
     this.init({ turnLimit: d.turnLimit, skill: d.skill, seconds: d.seconds });
     this.turn = d.turn; this.money = d.money; this.tec = d.tec; this.tecPts = d.tecPts;
+    this.stats = d.stats || { blue: { battleWins: 0, kills: 0 }, red: { battleWins: 0, kills: 0 } };
+    this.operationIndex = d.operationIndex || 0;
     for (let r = 0; r < MAP_H; r++) for (let c = 0; c < MAP_W; c++) this.cells[r][c].owner = d.owners[r][c];
     this.units = [];
-    for (const u of d.units) { const n = this.spawn(u.id, u.side, u.col, u.row); n.hp = u.hp; }
+    for (const u of d.units) {
+      const n = this.spawn(u.id, u.side, u.col, u.row);
+      n.hp = u.hp; n.xp = u.xp || 0; n.kills = u.kills || 0;
+    }
     this.side = 'blue'; this.mode = 'map';
     for (const u of this.units) if (u.side === 'blue') { u.acted = false; u.mp = UnitDB.get(u.id).mp; }
     return true;
@@ -495,6 +550,7 @@ const Strat = {
     this.drawMap(ctx);
     ctx.restore();
     this.drawBar(ctx);
+    this.drawOperation(ctx);
     this.drawPanel(ctx);
     if (this.menu) this.drawMenu(ctx);
     if (this.victory) this.drawVictory(ctx);
@@ -536,6 +592,11 @@ const Strat = {
       if (u.acted && u.side === this.side) ctx.globalAlpha = 0.55;
       ctx.drawImage(u.side === 'blue' ? set.mini.r : set.mini.l, p.x + 3, p.y + 1);
       ctx.restore();
+      const rank = veteranRank(u.xp);
+      if (rank.id > 0) {
+        ctx.fillStyle = rank.id >= 3 ? '#f5d020' : '#d8e8ff';
+        for (let k = 0; k < rank.id; k++) ctx.fillRect(p.x + 4 + k * 4, p.y, 3, 1);
+      }
       // HP 條
       const d = UnitDB.get(u.id), hp = clamp(u.hp / d.hp, 0, 1);
       if (hp < 1) {
@@ -551,6 +612,18 @@ const Strat = {
       ctx.strokeStyle = this.mode === 'target' ? '#ff4a3a' : '#f5d020';
       ctx.lineWidth = 1;
       this.strokeHex(ctx, p.x, p.y);
+    }
+    if (this.mode === 'move' && this.sel && this.reach) {
+      const k = this.cursor.col + ',' + this.cursor.row;
+      if (this.reach.has(k)) {
+        const path = pathTo(this.reach, this.sel, this.cursor.col, this.cursor.row);
+        ctx.fillStyle = '#a6dcff';
+        path.slice(1).forEach((step, i) => {
+          if ((i + this.blink / 8) % 2 >= 1) return;
+          const p = hexToPixel(step.col, step.row);
+          ctx.fillRect(p.x + 10, p.y + 11, 3, 2);
+        });
+      }
     }
   },
 
@@ -587,6 +660,30 @@ const Strat = {
       ctx.fillStyle = lit; ctx.fillRect(x + 8, y + 13, 6, 1);
       ctx.fillStyle = lit; ctx.fillRect(x + 6, y + 19, 2, 2); ctx.fillRect(x + 11, y + 19, 2, 2);
     }
+    if (own) {
+      const pulse = (this.blink + cell.col * 5 + cell.row * 7) % 48;
+      if (pulse < 12) {
+        ctx.fillStyle = lit;
+        ctx.fillRect(x + 10, y + 10 - (pulse >> 2), 2, 2);
+      }
+    }
+  },
+
+  drawOperation(ctx) {
+    ctx.fillStyle = this.operationFlash > 0 && this.blink % 12 < 8 ? 'rgba(40,62,104,.94)' : 'rgba(4,7,18,.88)';
+    ctx.fillRect(0, BAR_H, GW, 12);
+    ctx.fillStyle = '#334064'; ctx.fillRect(0, BAR_H + 11, GW, 1);
+    ptext(ctx, 4, BAR_H + 3, 'OP', this.operationFlash > 0 ? '#ffe680' : '#7ce0b0', 1);
+    if (this.operationIndex >= OPERATIONS.length) {
+      Core.text(25, BAR_H + 1, '全作戰完成：攻下紅軍工廠結束戰局', { size: 8, color: '#ffe680' });
+      return;
+    }
+    const p = operationProgress(this.operationIndex, this.operationState());
+    Core.text(25, BAR_H + 1, `${p.op.zh}：${p.op.brief}`, { size: 8, color: '#c9d4e8' });
+    const bw = 34, rate = p.current / p.target;
+    ctx.fillStyle = '#172039'; ctx.fillRect(215, BAR_H + 4, bw, 4);
+    ctx.fillStyle = '#5ad0a0'; ctx.fillRect(215, BAR_H + 4, Math.round(bw * rate), 4);
+    ptext(ctx, 196, BAR_H + 2, `${p.current}/${p.target}`, '#ffe680', 1);
   },
 
   drawBar(ctx) {
@@ -630,6 +727,8 @@ const Strat = {
       ptext(ctx, 158, PANEL_Y + 28, `${u.hp}/${d.hp}`, '#c9d4e8', 1);
       ptext(ctx, 200, PANEL_Y + 6, 'MP' + d.mp, '#7ce0b0', 1);
       ptext(ctx, 200, PANEL_Y + 16, 'DEF' + Math.round(d.def * 100), '#c9d4e8', 1);
+      const rank = veteranRank(u.xp);
+      Core.text(200, PANEL_Y + 28, `${rank.zh} ${u.xp || 0}XP`, { size: 7.5, color: rank.id >= 2 ? '#ffe680' : '#8ea0c8' });
     } else if (this.msgT > 0) {
       Core.text(60, PANEL_Y + 16, this.msg, { size: 9.5, color: '#f5d020' });
     } else {

@@ -19,6 +19,7 @@ const Battle = {
   cam: 0, timer: 0, limit: 3600, terrain: null, playerSide: 'blue',
   auto: false, over: 0, result: null, onEnd: null, paused: false,
   bg: null, skill: 0.5, shake: 0,
+  combo: 0, comboT: 0,
 
   /**
    * cfg = { blue:[{id,hp}], red:[{id,hp}], playerSide, playerIdx, terrain, auto, seconds, skill, onEnd }
@@ -26,6 +27,7 @@ const Battle = {
   start(cfg) {
     this.ents = []; this.bullets = []; this.fx = []; this.funnels = [];
     this.cam = 0; this.over = 0; this.result = null; this.paused = false; this.shake = 0;
+    this.combo = 0; this.comboT = 0;
     this.terrain = cfg.terrain || TERRAIN.space;
     this.playerSide = cfg.playerSide;
     this.auto = !!cfg.auto;
@@ -45,7 +47,7 @@ const Battle = {
           hp: s.hp * HP_SCALE, maxhp: def.hp * HP_SCALE,
           ammo: def.weapons.map(w => w ? w.ammo : 0),
           cd: [0, 0, 0, 0], fireT: 0, meleeT: 0, meleeHit: null,
-          flash: 0, dead: false, charge: 0, chargeIdx: -1,
+          flash: 0, dead: false, charge: 0, chargeIdx: -1, kills: 0,
           ai: { target: null, retarget: 0, evade: 0, dirY: 1, think: 0 },
           isPlayer: false
         };
@@ -169,12 +171,24 @@ const Battle = {
       if (x < -r.s || x > GW + r.s) continue;
       ctx.drawImage(r.img, (x - r.s / 2) | 0, (r.y - r.s / 2) | 0);
     }
+    // 高速推進時的像素速度線，讓慣性與衝刺方向更清楚。
+    if (this.player && this.player.thrust && Math.abs(this.player.vx) > 1.2) {
+      const dir = this.player.vx > 0 ? -1 : 1;
+      ctx.fillStyle = 'rgba(170,210,255,.42)';
+      for (let i = 0; i < 7; i++) {
+        const x = ((Core.frame * 5 * dir + i * 43) % (GW + 50) + GW + 50) % (GW + 50) - 25;
+        const y = FIELD_TOP + 12 + (i * 29 % (FIELD_BOT - FIELD_TOP - 20));
+        ctx.fillRect(x | 0, y | 0, 8 + (i % 3) * 4, 1);
+      }
+    }
   },
 
   /* ---------- 更新 ---------- */
   update() {
     if (Input.p('start') && !this.over) { this.paused = !this.paused; Sfx.cursor(); }
     if (this.paused) return;
+    if (this.comboT > 0) this.comboT--;
+    else this.combo = 0;
 
     if (!this.over) {
       this.timer--;
@@ -470,12 +484,16 @@ const Battle = {
 
   hurt(o, base, from) {
     const atkAdapt = from ? terrainAdapt(from.def, this.terrain) : 1;
-    const dmg = damage(base, atkAdapt, o.def.def);
+    const veteran = from ? veteranRank(from.ref.xp).dmg : 1;
+    const dmg = damage(base * veteran, atkAdapt, o.def.def);
     o.hp -= dmg;
     o.flash = 6;
+    this.fx.push({ t: 'dmg', x: o.x, y: o.y - 16, life: 24, value: dmg, side: from ? from.side : null });
+    if (from && from.isPlayer) { this.combo++; this.comboT = 90; }
     Sfx.hit();
     if (o.hp <= 0) {
       o.hp = 0; o.dead = true;
+      if (from) from.kills++;
       this.fx.push({ t: 'boom', x: o.x, y: o.y, life: 34 });
       this.shake = 12;
       Sfx.boom();
@@ -503,7 +521,8 @@ const Battle = {
     Sfx.stop();
     const out = this.ents.map(e => ({
       ref: e.ref, dead: e.dead, side: e.side,
-      hp: e.dead ? 0 : Math.max(1, Math.round(e.hp / HP_SCALE))     // 除回戰略層尺度
+      hp: e.dead ? 0 : Math.max(1, Math.round(e.hp / HP_SCALE)),    // 除回戰略層尺度
+      kills: e.kills || 0
     }));
     if (this.onEnd) this.onEnd({ result: this.result, units: out });
   },
@@ -526,6 +545,7 @@ const Battle = {
       if (e.dead) continue;
       this.drawEnt(ctx, e);
     }
+    this.drawOffscreenPointers(ctx);
     this.drawBullets(ctx);
     this.drawFx(ctx);
     ctx.restore();
@@ -573,6 +593,24 @@ const Battle = {
     if (e.isPlayer) {
       ctx.fillStyle = '#f5d020';
       ctx.fillRect(x + 14, y - 9, 4, 2); ctx.fillRect(x + 15, y - 7, 2, 2);
+    }
+    const rank = veteranRank(e.ref.xp);
+    if (rank.id > 0) {
+      ctx.fillStyle = rank.id >= 3 ? '#ffe060' : '#d8e8ff';
+      for (let i = 0; i < rank.id; i++) ctx.fillRect(x + 6 + i * 4, y - 8, 3, 1);
+    }
+  },
+
+  drawOffscreenPointers(ctx) {
+    for (const e of this.ents) {
+      if (e.dead || e.side === this.playerSide) continue;
+      const sx = e.x - this.cam;
+      if (sx >= 4 && sx <= GW - 4) continue;
+      const x = sx < 0 ? 3 : GW - 5;
+      const y = clamp(e.y | 0, FIELD_TOP + 4, FIELD_BOT - 4);
+      ctx.fillStyle = '#ff6a5a';
+      ctx.fillRect(x, y - 2, 2, 5);
+      ctx.fillRect(x + (sx < 0 ? 2 : -2), y - 1, 2, 3);
     }
   },
 
@@ -638,6 +676,10 @@ const Battle = {
           ctx.fillRect(x - L, y - 1, L * 2, 3);
           ctx.fillRect(x - 1, y - L, 3, L * 2);
         }
+      } else if (f.t === 'dmg') {
+        const yy = y - ((24 - f.life) >> 2);
+        const s = String(f.value);
+        ptext(ctx, x - ptextW(s, 1) / 2, yy, s, f.side === 'blue' ? '#9ef0ff' : '#ffd070', 1, '#000');
       }
     }
   },
@@ -653,6 +695,8 @@ const Battle = {
     // 左：我方機體
     if (p) {
       ptext(ctx, 4, 3, p.def.code, '#8cc8ff', 1, '#001028');
+      const rank = veteranRank(p.ref.xp);
+      if (rank.id > 0) ptext(ctx, 47, 3, rank.code, rank.id >= 3 ? '#ffe060' : '#b8c8e8', 1);
       const hp = clamp(p.hp / p.maxhp, 0, 1);
       ctx.fillStyle = '#16203c'; ctx.fillRect(4, 12, 78, 6);
       ctx.fillStyle = hp > 0.35 ? '#5ad0ff' : '#ff5a4a';
@@ -697,6 +741,9 @@ const Battle = {
         ctx.fillStyle = '#ff6a5a'; ctx.fillRect(x, y + 15, Math.round(12 * hp), 2);
       }
     });
+    if (this.combo >= 2 && this.comboT > 0) {
+      ptext(ctx, 86, 21, `${this.combo}HIT`, this.combo >= 10 ? '#ffe060' : '#9ef0ff', 1, '#001020');
+    }
   },
 
   drawPause(ctx) {

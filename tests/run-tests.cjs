@@ -5,6 +5,7 @@ const path = require('path');
 const H = require(path.join(__dirname, '..', 'js', 'hex.js'));
 const C = require(path.join(__dirname, '..', 'js', 'combat.js'));
 const U = require(path.join(__dirname, '..', 'js', 'units.js'));
+const P = require(path.join(__dirname, '..', 'js', 'progression.js'));
 
 let pass = 0, fail = 0;
 function ok(name, cond, extra) {
@@ -116,6 +117,22 @@ console.log('\n[5] 機體資料表');
     const b = p('blue'), r = p('red');
     return Math.abs(b - r) / Math.max(b, r) < 0.12;
   })(), { blue: defs.filter(d => d.side === 'blue').reduce((a, d) => a + C.power(d, d.hp), 0), red: defs.filter(d => d.side === 'red').reduce((a, d) => a + C.power(d, d.hp), 0) });
+}
+
+console.log('\n[6] 長線成長與 15 分鐘節奏');
+{
+  eq('存活一戰獲得 1 XP', P.battleXp(0, true), 1);
+  eq('擊墜 2 台並存活獲得 5 XP', P.battleXp(2, true), 5);
+  eq('3 XP 升為老練', P.veteranRank(3).code, 'R1');
+  eq('7 XP 升為精銳', P.veteranRank(7).code, 'R2');
+  eq('12 XP 升為 ACE', P.veteranRank(12).code, 'ACE');
+  eq('工廠每回合維修 20%', P.repairAtFactory(40, 60, true), 52);
+  eq('維修不超過最大 HP', P.repairAtFactory(58, 60, true), 60);
+  eq('非己方工廠不維修', P.repairAtFactory(40, 60, false), 40);
+  ok('四段作戰目標涵蓋開局、交戰、養成、終局', P.OPERATIONS.length === 4);
+  ok('起始 4 設施尚未完成先遣擴張', !P.operationProgress(0, { facilities: 4 }).done);
+  ok('控制第 5 座設施完成先遣擴張', P.operationProgress(0, { facilities: 5 }).done);
+  ok('兩場勝利才完成前線交鋒', !P.operationProgress(1, { battleWins: 1 }).done && P.operationProgress(1, { battleWins: 2 }).done);
 }
 
 console.log(`\n結果：${pass} 通過 / ${fail} 失敗\n`);

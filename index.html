@@ -11,7 +11,9 @@
   html,body{margin:0;padding:0;background:var(--bg);color:var(--txt);
     font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;}
   #wrap{display:flex;flex-direction:column;align-items:center;gap:14px;padding:18px 12px 40px}
-  #stage{position:relative;line-height:0;box-shadow:0 0 0 3px #1d1d33,0 12px 40px #000a;}
+  #stage{position:relative;line-height:0;isolation:isolate;box-shadow:0 0 0 2px #6775a0,0 0 0 5px #151a31,0 12px 40px #000a,0 0 36px #40508026;}
+  #stage::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
+    background:repeating-linear-gradient(180deg,transparent 0 3px,#02030a18 3px 4px);mix-blend-mode:multiply;}
   canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges;}
   #ui{position:absolute;left:0;top:0;pointer-events:none;image-rendering:auto;}
   h1{font-size:18px;letter-spacing:.28em;margin:0;color:var(--hi);font-weight:700}
@@ -65,8 +67,9 @@
         <li>佔領敵方全部工廠，或殲滅敵方全部單位</li>
         <li>回合用完 → 比設施數量</li>
         <li>工廠決定生產與 TEC 技術等級，都市決定收入</li>
+        <li>完成四段作戰目標，累積資金並培養 ACE 機體</li>
       </ul>
-      <p class="dim" style="margin-top:8px">TEC 升級才解得開高階機體：TEC 2 出重裝機、TEC 3 出王牌機。</p>
+      <p class="dim" style="margin-top:8px">TEC 2 出重裝機、TEC 3 出王牌機；受損機體停在己方工廠，每回合會維修 20%。</p>
     </div>
   </div>
   <p class="dim" style="max-width:840px">機體外形與名稱皆為原創設計，僅在比例與機能語彙上致敬 SD 機器人類型。</p>
@@ -78,6 +81,7 @@
 <script src="js/units.js"></script>
 <script src="js/hex.js"></script>
 <script src="js/combat.js"></script>
+<script src="js/progression.js"></script>
 <script src="js/battle.js"></script>
 <script src="js/strategy.js"></script>
 <script src="js/main.js"></script>

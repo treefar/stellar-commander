@@ -12,6 +12,11 @@ const Game = {
     for (let i = 0; i < 90; i++) {
       this.stars.push({ x: Math.random() * GW, y: Math.random() * GH, s: rnd(0.15, 0.7), c: pick(['#3a4468', '#6a76a4', '#aab4dc', '#ffffff']) });
     }
+    this.menuClouds = [
+      { x: 18, y: 18, s: 86, img: Battle.makeCloud(270, 43) },
+      { x: 164, y: 74, s: 64, img: Battle.makeCloud(226, 32) },
+      { x: 72, y: 138, s: 52, img: Battle.makeCloud(302, 26) }
+    ];
     addEventListener('keydown', () => Sfx.resume(), { once: true });
     addEventListener('pointerdown', () => Sfx.resume(), { once: true });
     requestAnimationFrame(this.loop.bind(this));
@@ -66,6 +71,14 @@ const Game = {
     }
   },
 
+  drawMenuSpace(ctx, spd) {
+    for (const c of this.menuClouds || []) {
+      const drift = ((this.t * (spd || 0.04) + c.x) % (GW + c.s)) - c.s;
+      ctx.drawImage(c.img, drift | 0, c.y, c.s, c.s);
+    }
+    this.drawStars(ctx, (spd || 0.04) * 2);
+  },
+
   /* ================= 標題 ================= */
   stepTitle() {
     if (this.showHowto) {
@@ -87,11 +100,7 @@ const Game = {
   },
 
   drawTitle(ctx) {
-    this.drawStars(ctx, 0.1);
-    // 星雲
-    const g = ctx.createRadialGradient(60, 60, 4, 60, 60, 90);
-    g.addColorStop(0, 'rgba(120,70,200,.35)'); g.addColorStop(1, 'rgba(60,30,110,0)');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, 160, 160);
+    this.drawMenuSpace(ctx, 0.035);
 
     const t1 = 'STELLAR';
     const t2 = 'COMMANDER';
@@ -128,21 +137,23 @@ const Game = {
       '地圖是回合制：移動單位、佔領工廠與都市。',
       '工廠決定生產與 TEC 技術等級，都市決定收入。',
       'TEC 2 解鎖重裝機，TEC 3 解鎖王牌機。',
+      '畫面上方的作戰目標會提供資金與中期方向。',
       '',
       '單位貼到敵人旁邊發動攻擊，畫面切成即時戰鬥。',
       '防守方那格與周圍 6 格的單位全部參戰，最多 7 台。',
       '戰鬥 60 秒，操作好就能以弱擊強；剩餘 HP 帶回地圖。',
+      '存活與擊墜會累積 XP；工廠每回合修復駐守機體。',
       '',
       '勝利：佔領敵方全部工廠，或殲滅敵方全部單位。'
     ];
-    lines.forEach((l, i) => Core.text(20, 46 + i * 14, l, { size: 9, color: l ? '#c9d4e8' : '#000' }));
-    if (this.t % 60 < 40) Core.text(GW / 2, 186, '按 Z 返回', { size: 9.5, align: 'center', color: '#f5d020' });
+    lines.forEach((l, i) => Core.text(20, 43 + i * 12.5, l, { size: 8.5, color: l ? '#c9d4e8' : '#000' }));
+    if (this.t % 60 < 40) Core.text(GW / 2, 188, '按 Z 返回', { size: 9.5, align: 'center', color: '#f5d020' });
   },
 
   /* ================= 設定 ================= */
   SETUP: [
     { k: 'skill', zh: '電腦強度', opts: [['輕鬆', 0.25], ['普通', 0.5], ['困難', 0.8]] },
-    { k: 'turnLimit', zh: '回合上限', opts: [['20', 20], ['30', 30], ['50', 50]] },
+    { k: 'turnLimit', zh: '戰局長度', opts: [['短局 10分', 20], ['標準 15分', 30], ['長局 25分', 50]] },
     { k: 'seconds', zh: '戰鬥秒數', opts: [['30', 30], ['60', 60], ['90', 90]] }
   ],
   setupIdx: [1, 1, 1],
@@ -170,7 +181,7 @@ const Game = {
   },
 
   drawSetup(ctx) {
-    this.drawStars(ctx, 0.08);
+    this.drawMenuSpace(ctx, 0.025);
     const t = 'BRIEFING';
     ptext(ctx, GW / 2 - ptextW(t, 2) / 2, 24, t, '#f5d020', 2, '#3a2000');
     Core.text(GW / 2, 46, '作戰設定', { size: 10, align: 'center', color: '#c9d4e8' });
@@ -235,10 +246,7 @@ const Game = {
 
   drawVs(ctx) {
     const v = this.vs;
-    this.drawStars(ctx, 0.16);
-    const g = ctx.createRadialGradient(40, 120, 4, 40, 120, 110);
-    g.addColorStop(0, 'rgba(90,60,180,.30)'); g.addColorStop(1, 'rgba(40,20,80,0)');
-    ctx.fillStyle = g; ctx.fillRect(0, 20, 180, 200);
+    this.drawMenuSpace(ctx, 0.06);
 
     const t = 'BATTLE';
     ptext(ctx, GW / 2 - ptextW(t, 3) / 2, 20, t, '#f5d020', 3, '#3a1c00');
