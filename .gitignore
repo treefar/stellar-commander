@@ -1,0 +1,13 @@
+# 參考影片的逐格截圖＝BANDAI 原作實機畫面，只留本機參考，不進公開版控
+參考資料/
+
+# 自動驗證產生的截圖（可用 tools/devserver.mjs 重新產生）
+shots/
+
+# 系統與編輯器
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+node_modules/
+.env

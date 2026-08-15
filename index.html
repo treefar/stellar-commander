@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>星域指揮官 STELLAR COMMANDER</title>
+<style>
+  :root{ --bg:#07070d; --panel:#12121f; --line:#2a2a44; --txt:#c9d4e8; --dim:#7c88a6; --hi:#f5c542; }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--txt);
+    font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;}
+  #wrap{display:flex;flex-direction:column;align-items:center;gap:14px;padding:18px 12px 40px}
+  #stage{position:relative;line-height:0;box-shadow:0 0 0 3px #1d1d33,0 12px 40px #000a;}
+  canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges;}
+  #ui{position:absolute;left:0;top:0;pointer-events:none;image-rendering:auto;}
+  h1{font-size:18px;letter-spacing:.28em;margin:0;color:var(--hi);font-weight:700}
+  h1 small{display:block;font-size:11px;letter-spacing:.12em;color:var(--dim);margin-top:6px;font-weight:400}
+  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;max-width:840px;width:100%}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+  .card h2{font-size:12px;letter-spacing:.16em;color:var(--hi);margin:0 0 8px}
+  .card p,.card li{font-size:12.5px;line-height:1.75;color:var(--txt);margin:0}
+  .card ul{margin:0;padding-left:1.1em}
+  kbd{background:#20203a;border:1px solid #3a3a5e;border-bottom-width:2px;border-radius:4px;
+    padding:1px 6px;font-family:ui-monospace,monospace;font-size:11px;color:#fff}
+  .dim{color:var(--dim);font-size:11.5px}
+  #hint{min-height:20px;font-size:12.5px;color:var(--hi);letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>星域指揮官<small>STELLAR COMMANDER — 致敬 SD 鋼彈 GX (SFC, 1994)</small></h1>
+  <div id="stage">
+    <canvas id="game" width="256" height="224"></canvas>
+    <canvas id="ui"></canvas>
+  </div>
+  <div id="hint"></div>
+
+  <div class="cols">
+    <div class="card">
+      <h2>戰略地圖 操作</h2>
+      <ul>
+        <li><kbd>↑↓←→</kbd> 移動游標</li>
+        <li><kbd>Z</kbd> 選擇／確定</li>
+        <li><kbd>X</kbd> 取消</li>
+        <li><kbd>C</kbd> 系統選單（結束回合／存檔）</li>
+      </ul>
+      <p class="dim" style="margin-top:8px">選好單位後，藍格＝可移動，紅格＝可攻擊。站上工廠或都市可佔領。</p>
+    </div>
+    <div class="card">
+      <h2>即時戰鬥 操作</h2>
+      <ul>
+        <li><kbd>↑↓←→</kbd> 推進（太空有慣性）</li>
+        <li><kbd>Z</kbd> 武器 1　光束步槍／機槍</li>
+        <li><kbd>X</kbd> 武器 2　光束軍刀（近戰）</li>
+        <li><kbd>C</kbd> 武器 3　火神砲／飛彈</li>
+        <li><kbd>V</kbd> 武器 4　特殊（按住可蓄力）</li>
+        <li><kbd>Enter</kbd> 暫停</li>
+      </ul>
+      <p class="dim" style="margin-top:8px">60 秒倒數。一方全滅或時間到就結束，剩餘 HP 會帶回地圖。</p>
+    </div>
+    <div class="card">
+      <h2>怎麼贏</h2>
+      <ul>
+        <li>佔領敵方全部工廠，或殲滅敵方全部單位</li>
+        <li>回合用完 → 比設施數量</li>
+        <li>工廠決定生產與 TEC 技術等級，都市決定收入</li>
+      </ul>
+      <p class="dim" style="margin-top:8px">TEC 升級才解得開高階機體：TEC 2 出重裝機、TEC 3 出王牌機。</p>
+    </div>
+  </div>
+  <p class="dim" style="max-width:840px">機體外形與名稱皆為原創設計，僅在比例與機能語彙上致敬 SD 機器人類型。</p>
+</div>
+
+<script src="js/core.js"></script>
+<script src="js/sprites.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/units.js"></script>
+<script src="js/hex.js"></script>
+<script src="js/combat.js"></script>
+<script src="js/battle.js"></script>
+<script src="js/strategy.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

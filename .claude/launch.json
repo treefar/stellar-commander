@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "stellar-commander",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["tools/devserver.mjs"],
+      "port": 5833
+    }
+  ]
+}
