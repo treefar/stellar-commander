@@ -2,11 +2,15 @@
 
 網頁版復古戰略遊戲，致敬 **SD 鋼彈 GX**（BANDAI，1994，Super Famicom）的「回合制搶地盤 ＋ 兩軍接觸就切成即時 2D 混戰」核心。
 
+**線上試玩：<https://treefar.link/stellar-commander/>**
+
 參考來源與完整拆解見 [企劃書_SD鋼彈GX復刻.md](企劃書_SD鋼彈GX復刻.md)。
 
 ---
 
 ## 怎麼玩
+
+線上版直接開網址就能玩。本機開發用：
 
 ```bash
 node tools/devserver.mjs
