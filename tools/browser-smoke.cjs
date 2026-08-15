@@ -2,6 +2,7 @@
 'use strict';
 
 const { chromium } = require('playwright');
+const BASE_URL = (process.env.BASE_URL || 'http://localhost:5833').replace(/\/$/, '');
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -11,7 +12,7 @@ const { chromium } = require('playwright');
   page.on('pageerror', e => errors.push(e.message));
 
   const tap = async key => { await page.keyboard.press(key); await page.waitForTimeout(70); };
-  await page.goto('http://localhost:5833', { waitUntil: 'networkidle' });
+  await page.goto(BASE_URL, { waitUntil: 'networkidle' });
   await page.screenshot({ path: 'shots/01_標題.png' });
   await tap('KeyZ');
   await page.screenshot({ path: 'shots/02_作戰設定.png' });
@@ -77,7 +78,7 @@ const { chromium } = require('playwright');
     await mobile.locator(`[data-input="${key}"]`).click();
     await mobile.waitForTimeout(90);
   };
-  await mobile.goto('http://localhost:5833', { waitUntil: 'networkidle' });
+  await mobile.goto(BASE_URL, { waitUntil: 'networkidle' });
   const touchVisible = await mobile.locator('#touch-controls').isVisible();
   await touch('a');
   await touch('down'); await touch('down'); await touch('down');
