@@ -70,6 +70,25 @@ const { chromium } = require('playwright');
     };
   });
 
+  const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  mobile.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+  mobile.on('pageerror', e => errors.push(e.message));
+  const touch = async key => {
+    await mobile.locator(`[data-input="${key}"]`).click();
+    await mobile.waitForTimeout(90);
+  };
+  await mobile.goto('http://localhost:5833', { waitUntil: 'networkidle' });
+  const touchVisible = await mobile.locator('#touch-controls').isVisible();
+  await touch('a');
+  await touch('down'); await touch('down'); await touch('down');
+  await touch('a');
+  const mobileStarted = await mobile.evaluate(() => ({ state: __game.state, cursor: { ...__strat.cursor } }));
+  await touch('right');
+  const mobileMoved = await mobile.evaluate(() => ({ state: __game.state, cursor: { ...__strat.cursor } }));
+  const mobileOverflow = await mobile.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+  await mobile.screenshot({ path: 'shots/11_手機觸控.png' });
+  await mobile.close();
+
   const checks = {
     enteredStrategy: initial.state === 'strategy',
     operationVisible: initial.operation.op.id === 'expand' && initial.operation.current === 4,
@@ -78,9 +97,13 @@ const { chromium } = require('playwright');
     saveRestoredProgression: persistence.xp === 7 && persistence.kills === 3 && persistence.wins === 2 && persistence.operationIndex === 2,
     battleCompleted: !!battle.result,
     battleReturnedKills: battle.units && battle.units.every(u => Number.isInteger(u.kills)),
+    touchControlsVisible: touchVisible,
+    touchStartedGame: mobileStarted.state === 'strategy',
+    touchMovedCursor: mobileMoved.state === 'strategy' && mobileMoved.cursor.col === mobileStarted.cursor.col + 1,
+    mobileNoHorizontalOverflow: !mobileOverflow,
     noBrowserErrors: errors.length === 0
   };
-  console.log(JSON.stringify({ checks, initial, objective, persistence, battle, errors }, null, 2));
+  console.log(JSON.stringify({ checks, initial, objective, persistence, battle, mobileStarted, mobileMoved, errors }, null, 2));
   await browser.close();
   if (Object.values(checks).some(v => !v)) process.exitCode = 1;
 })().catch(err => { console.error(err); process.exitCode = 1; });

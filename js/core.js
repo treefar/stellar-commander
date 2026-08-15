@@ -25,7 +25,8 @@ const Core = {
     const maxW = Math.min(window.innerWidth - 40, 1100);
     const maxH = window.innerHeight - 300;
     let s = Math.floor(Math.min(maxW / GW, Math.max(maxH, 300) / GH));
-    s = Math.max(2, Math.min(5, s));
+    // 手機窄於 512px 時用原生 1 倍；仍是整數縮放，不會破壞像素邊緣。
+    s = Math.max(1, Math.min(5, s));
     this.scale = s;
     this.cv.style.width = (GW * s) + 'px';
     this.cv.style.height = (GH * s) + 'px';
@@ -168,6 +169,26 @@ const Input = {
       this.down[k] = false;
     });
     addEventListener('blur', () => { this.down = {}; });
+    document.querySelectorAll('[data-input]').forEach(btn => {
+      const k = btn.dataset.input;
+      const press = e => {
+        e.preventDefault();
+        if (!this.down[k]) this.hit[k] = true;
+        this.down[k] = true;
+        btn.classList.add('on');
+        if (btn.setPointerCapture) btn.setPointerCapture(e.pointerId);
+      };
+      const release = e => {
+        e.preventDefault();
+        this.down[k] = false;
+        btn.classList.remove('on');
+      };
+      btn.addEventListener('pointerdown', press);
+      btn.addEventListener('pointerup', release);
+      btn.addEventListener('pointercancel', release);
+      btn.addEventListener('lostpointercapture', release);
+      btn.addEventListener('contextmenu', e => e.preventDefault());
+    });
   },
   endFrame() { this.hit = {}; },
   d(k) { return !!this.down[k]; },

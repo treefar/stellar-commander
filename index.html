@@ -18,6 +18,7 @@
   #ui{position:absolute;left:0;top:0;pointer-events:none;image-rendering:auto;}
   h1{font-size:18px;letter-spacing:.28em;margin:0;color:var(--hi);font-weight:700}
   h1 small{display:block;font-size:11px;letter-spacing:.12em;color:var(--dim);margin-top:6px;font-weight:400}
+  .mobile-title{display:none}
   .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;max-width:840px;width:100%}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
   .card h2{font-size:12px;letter-spacing:.16em;color:var(--hi);margin:0 0 8px}
@@ -27,16 +28,51 @@
     padding:1px 6px;font-family:ui-monospace,monospace;font-size:11px;color:#fff}
   .dim{color:var(--dim);font-size:11.5px}
   #hint{min-height:20px;font-size:12.5px;color:var(--hi);letter-spacing:.04em}
+  #touch-controls{display:none;width:min(100%,540px);grid-template-columns:132px 1fr;gap:16px;align-items:center;touch-action:none;user-select:none;-webkit-user-select:none}
+  .touch-dpad{display:grid;grid-template-columns:repeat(3,42px);grid-template-rows:repeat(3,42px);gap:3px}
+  .touch-actions{display:grid;grid-template-columns:repeat(3,minmax(48px,58px));gap:7px;justify-content:end;align-items:center}
+  .touch-btn{height:42px;border:1px solid #465074;border-bottom:4px solid #252d4d;border-radius:9px;background:#1b223c;color:#eef4ff;font:700 15px/1 system-ui,sans-serif;touch-action:none}
+  .touch-btn small{display:block;margin-top:3px;color:#8794b4;font-size:8px;font-weight:500}
+  .touch-btn.action{height:50px;border-color:#7a6330;background:#2b261b;color:#ffe680}
+  .touch-btn.start{grid-column:2/4;height:34px;color:#a9b8d8;font-size:11px;letter-spacing:.1em}
+  .touch-btn.on{transform:translateY(2px);border-bottom-width:2px;background:#344066;color:#fff}
+  @media (pointer:coarse),(max-width:700px){
+    #wrap{padding-top:12px;gap:11px}
+    #touch-controls{display:grid}
+    h1{font-size:16px;text-align:center}
+    h1 small{font-size:9px}
+    .desktop-title{display:none}.mobile-title{display:inline}
+  }
+  @media (max-width:380px){
+    #touch-controls{grid-template-columns:120px 1fr;gap:9px}
+    .touch-dpad{grid-template-columns:repeat(3,38px);grid-template-rows:repeat(3,38px)}
+    .touch-btn{height:38px}
+    .touch-actions{grid-template-columns:repeat(3,minmax(43px,52px));gap:5px}
+  }
 </style>
 </head>
 <body>
 <div id="wrap">
-  <h1>星域指揮官<small>STELLAR COMMANDER — 致敬 SD 鋼彈 GX (SFC, 1994)</small></h1>
+  <h1>星域指揮官<small><span class="desktop-title">STELLAR COMMANDER — 致敬 SD 鋼彈 GX (SFC, 1994)</span><span class="mobile-title">STELLAR COMMANDER</span></small></h1>
   <div id="stage">
     <canvas id="game" width="256" height="224"></canvas>
     <canvas id="ui"></canvas>
   </div>
   <div id="hint"></div>
+  <div id="touch-controls" aria-label="手機觸控操作">
+    <div class="touch-dpad" aria-label="方向鍵">
+      <span></span><button class="touch-btn" type="button" data-input="up" aria-label="上">▲</button><span></span>
+      <button class="touch-btn" type="button" data-input="left" aria-label="左">◀</button><span></span><button class="touch-btn" type="button" data-input="right" aria-label="右">▶</button>
+      <span></span><button class="touch-btn" type="button" data-input="down" aria-label="下">▼</button><span></span>
+    </div>
+    <div class="touch-actions" aria-label="動作鍵">
+      <button class="touch-btn action" type="button" data-input="a" aria-label="A 確定或武器一">A<small>確定／武1</small></button>
+      <button class="touch-btn action" type="button" data-input="b" aria-label="B 取消或武器二">B<small>取消／武2</small></button>
+      <button class="touch-btn action" type="button" data-input="c" aria-label="C 選單或武器三">C<small>選單／武3</small></button>
+      <button class="touch-btn action" type="button" data-input="d" aria-label="D 武器四">D<small>武器4</small></button>
+      <button class="touch-btn start" type="button" data-input="start" aria-label="開始或暫停">START／暫停</button>
+    </div>
+  </div>
 
   <div class="cols">
     <div class="card">
