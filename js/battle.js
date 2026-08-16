@@ -147,6 +147,19 @@ const Battle = {
   },
 
   drawBg(ctx) {
+    if (typeof ArtPack !== 'undefined' && ArtPack.drawBackground(ctx, Core.frame, 0.12)) {
+      // 正式母圖以整數像素漂移；高速線仍是即時操作回饋。
+      if (this.player && this.player.thrust && Math.abs(this.player.vx) > 1.2) {
+        const dir = this.player.vx > 0 ? -1 : 1;
+        ctx.fillStyle = 'rgba(170,210,255,.42)';
+        for (let i = 0; i < 7; i++) {
+          const x = ((Core.frame * 5 * dir + i * 43) % (GW + 50) + GW + 50) % (GW + 50) - 25;
+          const y = FIELD_TOP + 12 + (i * 29 % (FIELD_BOT - FIELD_TOP - 20));
+          ctx.fillRect(x | 0, y | 0, 8 + (i % 3) * 4, 1);
+        }
+      }
+      return;
+    }
     ctx.fillStyle = '#05050c';
     ctx.fillRect(0, HUD_H, GW, GH - HUD_H);
     const B = this.bg;
@@ -556,9 +569,10 @@ const Battle = {
   },
 
   drawEnt(ctx, e) {
-    const set = UnitDB.spr(e.def.id);
-    const pose = e.meleeT > 0 ? 'melee' : (e.fireT > 0 ? 'fire' : 'idle');
-    const img = e.face > 0 ? set[pose].r : set[pose].l;
+    const moving = e.thrust || Math.abs(e.vx) + Math.abs(e.vy) > 0.28;
+    const pose = e.meleeT > 0 ? 'melee' : (e.fireT > 0 ? 'fire' : (moving ? 'move' : 'idle'));
+    const progress = e.meleeT > 0 ? (14 - e.meleeT) / 14 : e.fireT > 0 ? (8 - e.fireT) / 8 : null;
+    const img = UnitDB.frame(e.def.id, pose, e.face, Core.frame, progress);
     const x = (e.x - this.cam - 16) | 0, y = (e.y - 16) | 0;
 
     // 推進火焰
@@ -572,7 +586,7 @@ const Battle = {
     if (e.flash > 0 && Core.frame % 4 < 2) {
       ctx.save();
       ctx.globalAlpha = 0.7;
-      ctx.drawImage(e.face > 0 ? set.flash.r : set.flash.l, x, y);
+      ctx.drawImage(UnitDB.frame(e.def.id, pose, e.face, Core.frame, progress, true), x, y);
       ctx.restore();
     }
 
@@ -727,10 +741,9 @@ const Battle = {
     ptext(ctx, 252 - ptextW('RED', 1), 3, 'RED', '#ff8a7a', 1, '#280000');
     foes.forEach((e, i) => {
       const x = 160 + i * 15, y = 13;
-      const set = UnitDB.spr(e.def.id);
       ctx.save();
       ctx.globalAlpha = e.dead ? 0.28 : 1;
-      ctx.drawImage(set.mini.l, 2, 1, 12, 14, x, y, 12, 14);
+      ctx.drawImage(UnitDB.miniFrame(e.def.id, 'idle', -1, Core.frame + i * 7), 2, 1, 12, 14, x, y, 12, 14);
       ctx.restore();
       if (e.dead) {
         ctx.fillStyle = '#ff3020';

@@ -543,7 +543,9 @@ const Strat = {
 
   /* ---------- 繪製 ---------- */
   draw(ctx) {
-    ctx.fillStyle = '#05060f'; ctx.fillRect(0, 0, GW, GH);
+    if (!ArtPack.drawBackground(ctx, Core.frame, 0.025)) {
+      ctx.fillStyle = '#05060f'; ctx.fillRect(0, 0, GW, GH);
+    }
     ctx.save();
     ctx.beginPath(); ctx.rect(0, BAR_H, GW, VIEW_H); ctx.clip();
     ctx.translate(-this.cam.x, BAR_H - this.cam.y);
@@ -587,10 +589,11 @@ const Strat = {
         const p1 = hexToPixel(cur.col, cur.row), p2 = hexToPixel(nxt.col, nxt.row);
         p = { x: lerp(p1.x, p2.x, a.t / 7), y: lerp(p1.y, p2.y, a.t / 7) };
       }
-      const set = UnitDB.spr(u.id);
+      const moving = !!(this.anim && this.anim.u === u);
+      const animTick = moving ? this.anim.i * 7 + this.anim.t : this.blink;
       ctx.save();
       if (u.acted && u.side === this.side) ctx.globalAlpha = 0.55;
-      ctx.drawImage(u.side === 'blue' ? set.mini.r : set.mini.l, p.x + 3, p.y + 1);
+      ctx.drawImage(UnitDB.miniFrame(u.id, moving ? 'move' : 'idle', u.side === 'blue' ? 1 : -1, animTick), p.x + 3, p.y + 1);
       ctx.restore();
       const rank = veteranRank(u.xp);
       if (rank.id > 0) {
@@ -716,8 +719,7 @@ const Strat = {
     }
     if (u) {
       const d = UnitDB.get(u.id);
-      const set = UnitDB.spr(u.id);
-      ctx.drawImage(set.idle.r, 56, PANEL_Y + 6, 32, 32);
+      ctx.drawImage(UnitDB.frame(u.id, 'idle', 1, this.blink), 56, PANEL_Y + 6, 32, 32);
       ptext(ctx, 92, PANEL_Y + 6, d.code, u.side === 'blue' ? '#8cc8ff' : '#ff9a8a', 1);
       Core.text(92, PANEL_Y + 16, `${d.name}　${d.role}`, { size: 8.5, color: '#c9d4e8' });
       ptext(ctx, 92, PANEL_Y + 28, 'HP', '#7c88a6', 1);
@@ -758,7 +760,7 @@ const Strat = {
         const d = it.def;
         ctx.fillStyle = 'rgba(6,10,24,.94)'; ctx.fillRect(x - 92, y, 88, 54);
         ctx.strokeStyle = '#3c4a78'; ctx.strokeRect(x - 91.5, y + .5, 87, 53);
-        ctx.drawImage(UnitDB.spr(d.id).idle.r, x - 88, y + 10);
+        ctx.drawImage(UnitDB.frame(d.id, 'idle', 1, this.blink), x - 88, y + 10);
         ptext(ctx, x - 52, y + 5, 'HP' + d.hp, '#5ad0ff', 1);
         ptext(ctx, x - 52, y + 15, 'MP' + d.mp, '#7ce0b0', 1);
         ptext(ctx, x - 52, y + 25, 'DEF' + Math.round(d.def * 100), '#c9d4e8', 1);

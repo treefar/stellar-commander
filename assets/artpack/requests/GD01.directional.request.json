@@ -1,0 +1,39 @@
+{
+  "cell": { "shape": "square", "size": 32, "safe_margin": 2 },
+  "fit": {
+    "pixel_unfake": true,
+    "logical_height": 32,
+    "palette_size": 15,
+    "detail_bias": true,
+    "outline": 0.62,
+    "align_x": "foot-centroid",
+    "align_y": "bottom",
+    "ground_frames": true
+  },
+  "states": {
+    "side_idle": {
+      "frames": 4,
+      "fps": 4,
+      "loop": true,
+      "action": "readable four-phase screen-right mechanical idle loop: preserve the accepted side anchor identity, compact rifle and exact foot baseline; frame 1 neutral, frame 2 chest and helmet rise by exactly one logical pixel with shoulder armor lagging, frame 3 settle with a bright visor sensor pulse and backpack vent pulse, frame 4 return exactly to frame 1; feet remain planted with no sliding, proportions stay constant, and every visible pixel block uses exactly the accepted 32x32 anchor's coarse block size with no finer pixels, mixed scales or subpixel detail"
+    },
+    "side_move": {
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "action": "screen-right cyclic forward-thrust flight: preserve the accepted side anchor identity exactly; slight forward lean, compact backpack compression and extension, subtle leg tuck and armor inertia, then exact seamless return to the first pose; no detached flame or effects"
+    },
+    "side_fire": {
+      "frames": 4,
+      "fps": 12,
+      "loop": false,
+      "action": "screen-right compact-rifle firing sequence: preserve the accepted side anchor identity exactly; raise rifle, recoil without muzzle effect, settle, return to idle; every visible pixel block must use exactly the accepted 32x32 anchor's coarse block size, with no finer pixels, mixed scales or subpixel detail"
+    },
+    "side_melee": {
+      "frames": 5,
+      "fps": 12,
+      "loop": false,
+      "action": "screen-right energy-saber melee sequence: preserve the accepted side anchor identity exactly; brace, draw a short solid cyan-white pixel blade physically attached to the right hand, windup, slash, recover and return to idle; no glow, trail or detached effect; do not use the rifle as the melee weapon; every visible pixel block must use exactly the accepted 32x32 anchor's coarse block size, with no finer pixels, mixed scales or subpixel detail"
+    }
+  }
+}

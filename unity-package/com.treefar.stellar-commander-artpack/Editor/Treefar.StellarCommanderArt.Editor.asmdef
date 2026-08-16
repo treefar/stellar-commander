@@ -1,0 +1,5 @@
+{
+  "name": "Treefar.StellarCommanderArt.Editor",
+  "rootNamespace": "Treefar.StellarCommanderArt.Editor",
+  "includePlatforms": ["Editor"]
+}

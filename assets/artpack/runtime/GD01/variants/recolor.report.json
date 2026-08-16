@@ -1,0 +1,998 @@
+{
+  "ok": true,
+  "kind": "sprite-gen-recolor-report",
+  "base": "sprite-sheet-alpha.png",
+  "match": "exact",
+  "tolerance": 0,
+  "alpha_threshold": 8,
+  "variant_count": 7,
+  "variants": [
+    {
+      "name": "SW02",
+      "sheet": "SW02.png",
+      "substituted_pixels": 2460,
+      "substitutions": [
+        {
+          "from": "#232946",
+          "to": "#174c56",
+          "pixels": 488
+        },
+        {
+          "from": "#444555",
+          "to": "#23424f",
+          "pixels": 229
+        },
+        {
+          "from": "#504e5c",
+          "to": "#28535d",
+          "pixels": 133
+        },
+        {
+          "from": "#5f6379",
+          "to": "#2d6870",
+          "pixels": 153
+        },
+        {
+          "from": "#6f7389",
+          "to": "#367a80",
+          "pixels": 121
+        },
+        {
+          "from": "#777c92",
+          "to": "#3f8f91",
+          "pixels": 102
+        },
+        {
+          "from": "#7f869f",
+          "to": "#4aa3a1",
+          "pixels": 188
+        },
+        {
+          "from": "#9cb0ce",
+          "to": "#70c9c3",
+          "pixels": 351
+        },
+        {
+          "from": "#9d1913",
+          "to": "#f5d65f",
+          "pixels": 108
+        },
+        {
+          "from": "#9f9685",
+          "to": "#a8d8d4",
+          "pixels": 2
+        },
+        {
+          "from": "#dfa12f",
+          "to": "#f08a40",
+          "pixels": 13
+        },
+        {
+          "from": "#e1e4eb",
+          "to": "#d6f4ef",
+          "pixels": 572
+        }
+      ],
+      "unused_sources": [],
+      "passthrough_pixels": 4838,
+      "passthrough_color_count": 17,
+      "passthrough_colors": [
+        {
+          "hex": "#020202",
+          "pixels": 2330
+        },
+        {
+          "hex": "#000000",
+          "pixels": 1073
+        },
+        {
+          "hex": "#121014",
+          "pixels": 667
+        },
+        {
+          "hex": "#0d0f1a",
+          "pixels": 202
+        },
+        {
+          "hex": "#060607",
+          "pixels": 141
+        },
+        {
+          "hex": "#5b4f5b",
+          "pixels": 119
+        },
+        {
+          "hex": "#191a20",
+          "pixels": 70
+        },
+        {
+          "hex": "#555659",
+          "pixels": 65
+        },
+        {
+          "hex": "#3b424e",
+          "pixels": 62
+        },
+        {
+          "hex": "#1e1d22",
+          "pixels": 34
+        },
+        {
+          "hex": "#2a2b34",
+          "pixels": 20
+        },
+        {
+          "hex": "#24252d",
+          "pixels": 19
+        },
+        {
+          "hex": "#30323c",
+          "pixels": 13
+        },
+        {
+          "hex": "#221e22",
+          "pixels": 10
+        },
+        {
+          "hex": "#3b0907",
+          "pixels": 7
+        },
+        {
+          "hex": "#543d11",
+          "pixels": 4
+        },
+        {
+          "hex": "#2d2f37",
+          "pixels": 2
+        }
+      ],
+      "manifest": "SW02.manifest.json"
+    },
+    {
+      "name": "BW03",
+      "sheet": "BW03.png",
+      "substituted_pixels": 2460,
+      "substitutions": [
+        {
+          "from": "#232946",
+          "to": "#202b58",
+          "pixels": 488
+        },
+        {
+          "from": "#444555",
+          "to": "#293663",
+          "pixels": 229
+        },
+        {
+          "from": "#504e5c",
+          "to": "#303f76",
+          "pixels": 133
+        },
+        {
+          "from": "#5f6379",
+          "to": "#394b8b",
+          "pixels": 153
+        },
+        {
+          "from": "#6f7389",
+          "to": "#465ba0",
+          "pixels": 121
+        },
+        {
+          "from": "#777c92",
+          "to": "#526ab3",
+          "pixels": 102
+        },
+        {
+          "from": "#7f869f",
+          "to": "#657dc4",
+          "pixels": 188
+        },
+        {
+          "from": "#9cb0ce",
+          "to": "#b69a58",
+          "pixels": 351
+        },
+        {
+          "from": "#9d1913",
+          "to": "#75e8ff",
+          "pixels": 108
+        },
+        {
+          "from": "#9f9685",
+          "to": "#a78b53",
+          "pixels": 2
+        },
+        {
+          "from": "#dfa12f",
+          "to": "#f2cf55",
+          "pixels": 13
+        },
+        {
+          "from": "#e1e4eb",
+          "to": "#d8c58d",
+          "pixels": 572
+        }
+      ],
+      "unused_sources": [],
+      "passthrough_pixels": 4838,
+      "passthrough_color_count": 17,
+      "passthrough_colors": [
+        {
+          "hex": "#020202",
+          "pixels": 2330
+        },
+        {
+          "hex": "#000000",
+          "pixels": 1073
+        },
+        {
+          "hex": "#121014",
+          "pixels": 667
+        },
+        {
+          "hex": "#0d0f1a",
+          "pixels": 202
+        },
+        {
+          "hex": "#060607",
+          "pixels": 141
+        },
+        {
+          "hex": "#5b4f5b",
+          "pixels": 119
+        },
+        {
+          "hex": "#191a20",
+          "pixels": 70
+        },
+        {
+          "hex": "#555659",
+          "pixels": 65
+        },
+        {
+          "hex": "#3b424e",
+          "pixels": 62
+        },
+        {
+          "hex": "#1e1d22",
+          "pixels": 34
+        },
+        {
+          "hex": "#2a2b34",
+          "pixels": 20
+        },
+        {
+          "hex": "#24252d",
+          "pixels": 19
+        },
+        {
+          "hex": "#30323c",
+          "pixels": 13
+        },
+        {
+          "hex": "#221e22",
+          "pixels": 10
+        },
+        {
+          "hex": "#3b0907",
+          "pixels": 7
+        },
+        {
+          "hex": "#543d11",
+          "pixels": 4
+        },
+        {
+          "hex": "#2d2f37",
+          "pixels": 2
+        }
+      ],
+      "manifest": "BW03.manifest.json"
+    },
+    {
+      "name": "PL00",
+      "sheet": "PL00.png",
+      "substituted_pixels": 2460,
+      "substitutions": [
+        {
+          "from": "#232946",
+          "to": "#3154a8",
+          "pixels": 488
+        },
+        {
+          "from": "#444555",
+          "to": "#273d75",
+          "pixels": 229
+        },
+        {
+          "from": "#504e5c",
+          "to": "#344b87",
+          "pixels": 133
+        },
+        {
+          "from": "#5f6379",
+          "to": "#465f9f",
+          "pixels": 153
+        },
+        {
+          "from": "#6f7389",
+          "to": "#6178b0",
+          "pixels": 121
+        },
+        {
+          "from": "#777c92",
+          "to": "#778abf",
+          "pixels": 102
+        },
+        {
+          "from": "#7f869f",
+          "to": "#9ca9cf",
+          "pixels": 188
+        },
+        {
+          "from": "#9cb0ce",
+          "to": "#d8deef",
+          "pixels": 351
+        },
+        {
+          "from": "#9d1913",
+          "to": "#f3d84e",
+          "pixels": 108
+        },
+        {
+          "from": "#9f9685",
+          "to": "#c8cede",
+          "pixels": 2
+        },
+        {
+          "from": "#dfa12f",
+          "to": "#e8584f",
+          "pixels": 13
+        },
+        {
+          "from": "#e1e4eb",
+          "to": "#ffffff",
+          "pixels": 572
+        }
+      ],
+      "unused_sources": [],
+      "passthrough_pixels": 4838,
+      "passthrough_color_count": 17,
+      "passthrough_colors": [
+        {
+          "hex": "#020202",
+          "pixels": 2330
+        },
+        {
+          "hex": "#000000",
+          "pixels": 1073
+        },
+        {
+          "hex": "#121014",
+          "pixels": 667
+        },
+        {
+          "hex": "#0d0f1a",
+          "pixels": 202
+        },
+        {
+          "hex": "#060607",
+          "pixels": 141
+        },
+        {
+          "hex": "#5b4f5b",
+          "pixels": 119
+        },
+        {
+          "hex": "#191a20",
+          "pixels": 70
+        },
+        {
+          "hex": "#555659",
+          "pixels": 65
+        },
+        {
+          "hex": "#3b424e",
+          "pixels": 62
+        },
+        {
+          "hex": "#1e1d22",
+          "pixels": 34
+        },
+        {
+          "hex": "#2a2b34",
+          "pixels": 20
+        },
+        {
+          "hex": "#24252d",
+          "pixels": 19
+        },
+        {
+          "hex": "#30323c",
+          "pixels": 13
+        },
+        {
+          "hex": "#221e22",
+          "pixels": 10
+        },
+        {
+          "hex": "#3b0907",
+          "pixels": 7
+        },
+        {
+          "hex": "#543d11",
+          "pixels": 4
+        },
+        {
+          "hex": "#2d2f37",
+          "pixels": 2
+        }
+      ],
+      "manifest": "PL00.manifest.json"
+    },
+    {
+      "name": "GR01",
+      "sheet": "GR01.png",
+      "substituted_pixels": 2460,
+      "substitutions": [
+        {
+          "from": "#232946",
+          "to": "#263923",
+          "pixels": 488
+        },
+        {
+          "from": "#444555",
+          "to": "#2c402a",
+          "pixels": 229
+        },
+        {
+          "from": "#504e5c",
+          "to": "#344d31",
+          "pixels": 133
+        },
+        {
+          "from": "#5f6379",
+          "to": "#3e5d39",
+          "pixels": 153
+        },
+        {
+          "from": "#6f7389",
+          "to": "#4b6d43",
+          "pixels": 121
+        },
+        {
+          "from": "#777c92",
+          "to": "#587e4e",
+          "pixels": 102
+        },
+        {
+          "from": "#7f869f",
+          "to": "#668e59",
+          "pixels": 188
+        },
+        {
+          "from": "#9cb0ce",
+          "to": "#8eb879",
+          "pixels": 351
+        },
+        {
+          "from": "#9d1913",
+          "to": "#ff684f",
+          "pixels": 108
+        },
+        {
+          "from": "#9f9685",
+          "to": "#829775",
+          "pixels": 2
+        },
+        {
+          "from": "#dfa12f",
+          "to": "#d6b24e",
+          "pixels": 13
+        },
+        {
+          "from": "#e1e4eb",
+          "to": "#c8dda8",
+          "pixels": 572
+        }
+      ],
+      "unused_sources": [],
+      "passthrough_pixels": 4838,
+      "passthrough_color_count": 17,
+      "passthrough_colors": [
+        {
+          "hex": "#020202",
+          "pixels": 2330
+        },
+        {
+          "hex": "#000000",
+          "pixels": 1073
+        },
+        {
+          "hex": "#121014",
+          "pixels": 667
+        },
+        {
+          "hex": "#0d0f1a",
+          "pixels": 202
+        },
+        {
+          "hex": "#060607",
+          "pixels": 141
+        },
+        {
+          "hex": "#5b4f5b",
+          "pixels": 119
+        },
+        {
+          "hex": "#191a20",
+          "pixels": 70
+        },
+        {
+          "hex": "#555659",
+          "pixels": 65
+        },
+        {
+          "hex": "#3b424e",
+          "pixels": 62
+        },
+        {
+          "hex": "#1e1d22",
+          "pixels": 34
+        },
+        {
+          "hex": "#2a2b34",
+          "pixels": 20
+        },
+        {
+          "hex": "#24252d",
+          "pixels": 19
+        },
+        {
+          "hex": "#30323c",
+          "pixels": 13
+        },
+        {
+          "hex": "#221e22",
+          "pixels": 10
+        },
+        {
+          "hex": "#3b0907",
+          "pixels": 7
+        },
+        {
+          "hex": "#543d11",
+          "pixels": 4
+        },
+        {
+          "hex": "#2d2f37",
+          "pixels": 2
+        }
+      ],
+      "manifest": "GR01.manifest.json"
+    },
+    {
+      "name": "LC02",
+      "sheet": "LC02.png",
+      "substituted_pixels": 2460,
+      "substitutions": [
+        {
+          "from": "#232946",
+          "to": "#34294f",
+          "pixels": 488
+        },
+        {
+          "from": "#444555",
+          "to": "#3b2f5c",
+          "pixels": 229
+        },
+        {
+          "from": "#504e5c",
+          "to": "#48386c",
+          "pixels": 133
+        },
+        {
+          "from": "#5f6379",
+          "to": "#55427e",
+          "pixels": 153
+        },
+        {
+          "from": "#6f7389",
+          "to": "#624f8f",
+          "pixels": 121
+        },
+        {
+          "from": "#777c92",
+          "to": "#725ca1",
+          "pixels": 102
+        },
+        {
+          "from": "#7f869f",
+          "to": "#8269b2",
+          "pixels": 188
+        },
+        {
+          "from": "#9cb0ce",
+          "to": "#a98bd3",
+          "pixels": 351
+        },
+        {
+          "from": "#9d1913",
+          "to": "#ff7658",
+          "pixels": 108
+        },
+        {
+          "from": "#9f9685",
+          "to": "#9e8cb4",
+          "pixels": 2
+        },
+        {
+          "from": "#dfa12f",
+          "to": "#e4bd62",
+          "pixels": 13
+        },
+        {
+          "from": "#e1e4eb",
+          "to": "#d7c8ef",
+          "pixels": 572
+        }
+      ],
+      "unused_sources": [],
+      "passthrough_pixels": 4838,
+      "passthrough_color_count": 17,
+      "passthrough_colors": [
+        {
+          "hex": "#020202",
+          "pixels": 2330
+        },
+        {
+          "hex": "#000000",
+          "pixels": 1073
+        },
+        {
+          "hex": "#121014",
+          "pixels": 667
+        },
+        {
+          "hex": "#0d0f1a",
+          "pixels": 202
+        },
+        {
+          "hex": "#060607",
+          "pixels": 141
+        },
+        {
+          "hex": "#5b4f5b",
+          "pixels": 119
+        },
+        {
+          "hex": "#191a20",
+          "pixels": 70
+        },
+        {
+          "hex": "#555659",
+          "pixels": 65
+        },
+        {
+          "hex": "#3b424e",
+          "pixels": 62
+        },
+        {
+          "hex": "#1e1d22",
+          "pixels": 34
+        },
+        {
+          "hex": "#2a2b34",
+          "pixels": 20
+        },
+        {
+          "hex": "#24252d",
+          "pixels": 19
+        },
+        {
+          "hex": "#30323c",
+          "pixels": 13
+        },
+        {
+          "hex": "#221e22",
+          "pixels": 10
+        },
+        {
+          "hex": "#3b0907",
+          "pixels": 7
+        },
+        {
+          "hex": "#543d11",
+          "pixels": 4
+        },
+        {
+          "hex": "#2d2f37",
+          "pixels": 2
+        }
+      ],
+      "manifest": "LC02.manifest.json"
+    },
+    {
+      "name": "WL03",
+      "sheet": "WL03.png",
+      "substituted_pixels": 2460,
+      "substitutions": [
+        {
+          "from": "#232946",
+          "to": "#243f3e",
+          "pixels": 488
+        },
+        {
+          "from": "#444555",
+          "to": "#2a4a48",
+          "pixels": 229
+        },
+        {
+          "from": "#504e5c",
+          "to": "#325956",
+          "pixels": 133
+        },
+        {
+          "from": "#5f6379",
+          "to": "#3b6964",
+          "pixels": 153
+        },
+        {
+          "from": "#6f7389",
+          "to": "#467a73",
+          "pixels": 121
+        },
+        {
+          "from": "#777c92",
+          "to": "#518d83",
+          "pixels": 102
+        },
+        {
+          "from": "#7f869f",
+          "to": "#5e9f92",
+          "pixels": 188
+        },
+        {
+          "from": "#9cb0ce",
+          "to": "#b4a269",
+          "pixels": 351
+        },
+        {
+          "from": "#9d1913",
+          "to": "#ff7057",
+          "pixels": 108
+        },
+        {
+          "from": "#9f9685",
+          "to": "#9c9168",
+          "pixels": 2
+        },
+        {
+          "from": "#dfa12f",
+          "to": "#e8c35e",
+          "pixels": 13
+        },
+        {
+          "from": "#e1e4eb",
+          "to": "#d7c995",
+          "pixels": 572
+        }
+      ],
+      "unused_sources": [],
+      "passthrough_pixels": 4838,
+      "passthrough_color_count": 17,
+      "passthrough_colors": [
+        {
+          "hex": "#020202",
+          "pixels": 2330
+        },
+        {
+          "hex": "#000000",
+          "pixels": 1073
+        },
+        {
+          "hex": "#121014",
+          "pixels": 667
+        },
+        {
+          "hex": "#0d0f1a",
+          "pixels": 202
+        },
+        {
+          "hex": "#060607",
+          "pixels": 141
+        },
+        {
+          "hex": "#5b4f5b",
+          "pixels": 119
+        },
+        {
+          "hex": "#191a20",
+          "pixels": 70
+        },
+        {
+          "hex": "#555659",
+          "pixels": 65
+        },
+        {
+          "hex": "#3b424e",
+          "pixels": 62
+        },
+        {
+          "hex": "#1e1d22",
+          "pixels": 34
+        },
+        {
+          "hex": "#2a2b34",
+          "pixels": 20
+        },
+        {
+          "hex": "#24252d",
+          "pixels": 19
+        },
+        {
+          "hex": "#30323c",
+          "pixels": 13
+        },
+        {
+          "hex": "#221e22",
+          "pixels": 10
+        },
+        {
+          "hex": "#3b0907",
+          "pixels": 7
+        },
+        {
+          "hex": "#543d11",
+          "pixels": 4
+        },
+        {
+          "hex": "#2d2f37",
+          "pixels": 2
+        }
+      ],
+      "manifest": "WL03.manifest.json"
+    },
+    {
+      "name": "RP00",
+      "sheet": "RP00.png",
+      "substituted_pixels": 2460,
+      "substitutions": [
+        {
+          "from": "#232946",
+          "to": "#57232a",
+          "pixels": 488
+        },
+        {
+          "from": "#444555",
+          "to": "#68282f",
+          "pixels": 229
+        },
+        {
+          "from": "#504e5c",
+          "to": "#7c2f35",
+          "pixels": 133
+        },
+        {
+          "from": "#5f6379",
+          "to": "#92383b",
+          "pixels": 153
+        },
+        {
+          "from": "#6f7389",
+          "to": "#a84443",
+          "pixels": 121
+        },
+        {
+          "from": "#777c92",
+          "to": "#bc544f",
+          "pixels": 102
+        },
+        {
+          "from": "#7f869f",
+          "to": "#cf675f",
+          "pixels": 188
+        },
+        {
+          "from": "#9cb0ce",
+          "to": "#d89b6f",
+          "pixels": 351
+        },
+        {
+          "from": "#9d1913",
+          "to": "#ffe273",
+          "pixels": 108
+        },
+        {
+          "from": "#9f9685",
+          "to": "#c39870",
+          "pixels": 2
+        },
+        {
+          "from": "#dfa12f",
+          "to": "#f4cf58",
+          "pixels": 13
+        },
+        {
+          "from": "#e1e4eb",
+          "to": "#f2c98f",
+          "pixels": 572
+        }
+      ],
+      "unused_sources": [],
+      "passthrough_pixels": 4838,
+      "passthrough_color_count": 17,
+      "passthrough_colors": [
+        {
+          "hex": "#020202",
+          "pixels": 2330
+        },
+        {
+          "hex": "#000000",
+          "pixels": 1073
+        },
+        {
+          "hex": "#121014",
+          "pixels": 667
+        },
+        {
+          "hex": "#0d0f1a",
+          "pixels": 202
+        },
+        {
+          "hex": "#060607",
+          "pixels": 141
+        },
+        {
+          "hex": "#5b4f5b",
+          "pixels": 119
+        },
+        {
+          "hex": "#191a20",
+          "pixels": 70
+        },
+        {
+          "hex": "#555659",
+          "pixels": 65
+        },
+        {
+          "hex": "#3b424e",
+          "pixels": 62
+        },
+        {
+          "hex": "#1e1d22",
+          "pixels": 34
+        },
+        {
+          "hex": "#2a2b34",
+          "pixels": 20
+        },
+        {
+          "hex": "#24252d",
+          "pixels": 19
+        },
+        {
+          "hex": "#30323c",
+          "pixels": 13
+        },
+        {
+          "hex": "#221e22",
+          "pixels": 10
+        },
+        {
+          "hex": "#3b0907",
+          "pixels": 7
+        },
+        {
+          "hex": "#543d11",
+          "pixels": 4
+        },
+        {
+          "hex": "#2d2f37",
+          "pixels": 2
+        }
+      ],
+      "manifest": "RP00.manifest.json"
+    }
+  ]
+}

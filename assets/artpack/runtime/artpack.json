@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "kind": "stellar-commander-artpack",
+  "scenery": [
+    { "id": "space-v1", "src": "scenery/space-background-v1.png" }
+  ],
+  "units": [
+    { "id": "GD01", "path": "GD01" },
+    { "id": "SW02", "manifest": "GD01/manifest.json", "sheet": "GD01/variants/SW02.png", "variantOf": "GD01" },
+    { "id": "BW03", "manifest": "GD01/manifest.json", "sheet": "GD01/variants/BW03.png", "variantOf": "GD01" },
+    { "id": "PL00", "manifest": "GD01/manifest.json", "sheet": "GD01/variants/PL00.png", "variantOf": "GD01" },
+    { "id": "GR01", "manifest": "GD01/manifest.json", "sheet": "GD01/variants/GR01.png", "variantOf": "GD01" },
+    { "id": "LC02", "manifest": "GD01/manifest.json", "sheet": "GD01/variants/LC02.png", "variantOf": "GD01" },
+    { "id": "WL03", "manifest": "GD01/manifest.json", "sheet": "GD01/variants/WL03.png", "variantOf": "GD01" },
+    { "id": "RP00", "manifest": "GD01/manifest.json", "sheet": "GD01/variants/RP00.png", "variantOf": "GD01" }
+  ]
+}

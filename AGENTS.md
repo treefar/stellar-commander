@@ -6,7 +6,8 @@
 
 ## 技術限制（不要打破）
 - **無建置流程**：純 HTML＋原生 JS，`<script>` 直接載入。不要引入 npm 套件、bundler、框架。
-- **無外部二進位資產**：機體、地形、特效全部程式生成。不要新增 png/jpg 到 `js/` 的引用路徑。
+- **正式美術集中管理**：正式 PNG／WebP 只可放在 `assets/artpack/runtime/`，由 `assets/artpack/runtime/artpack.json` 定義；網頁不得散落硬編 atlas 座標，Unity 只取用同一份 runtime 圖檔與 manifest。`js/` 仍禁止放二進位資產。
+- **正式美術來源**：只能使用核准 ImageGen／Nano Banana／GPT Image 2 的生成內容或有明確授權的 Owned 素材；程序圖形只可保留為明確標示的 legacy fallback，不得再宣稱正式美術。
 - **內部解析度固定 256×224**，只做整數倍放大。畫像素內容一律用整數座標。
 - **不要用 `ctx.arc()` 或漸層直接畫背景物件**：會產生平滑邊緣，破壞像素風格。要畫圓形物體先產生低解析度像素圖再整數放大（參考 `Battle.makeRock` / `Battle.makeCloud`）。
 
@@ -29,6 +30,8 @@
 node tests/run-tests.cjs && node tests/balance.test.cjs
 ```
 兩個都要綠才算完成。純函式邏輯放 `hex.js` / `combat.js` 才測得到，不要把規則寫死在渲染程式碼裡。
+
+美術改動另外必須通過：manifest／尺寸／alpha／atlas rect 機器稽核、接觸表與動畫 GIF 人眼檢查、瀏覽器無 chroma-key 漏色，以及 Unity Point／Clamp／Uncompressed／無 mipmap／PPU 設定檢查。
 
 ## 除錯用的瀏覽器鉤子
 開 `tools/devserver.mjs` 後，console 可用 `__game` / `__strat` / `__battle`。

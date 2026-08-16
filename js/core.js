@@ -22,7 +22,13 @@ const Core = {
   },
 
   resize() {
-    const maxW = Math.min(window.innerWidth - 40, 1100);
+    const host = document.querySelector('.game-viewport');
+    const style = host ? getComputedStyle(host) : null;
+    const hostInnerW = host
+      ? host.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight)
+      : window.innerWidth - 40;
+    // 以卡片內真正可用的寬度縮放，避免中間寬度在卡片邊界產生橫向溢出。
+    const maxW = Math.min(hostInnerW, 768);
     const maxH = window.innerHeight - 300;
     let s = Math.floor(Math.min(maxW / GW, Math.max(maxH, 300) / GH));
     // 手機窄於 512px 時用原生 1 倍；仍是整數縮放，不會破壞像素邊緣。

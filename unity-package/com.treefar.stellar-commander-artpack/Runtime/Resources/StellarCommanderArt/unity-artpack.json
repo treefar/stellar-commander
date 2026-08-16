@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "pixelsPerUnit": 32,
+  "cellWidth": 32,
+  "cellHeight": 32,
+  "units": [
+    { "id": "GD01", "texture": "StellarCommanderArt/Units/T_GD01", "states": [
+      { "name": "idle", "row": 0, "frames": 4, "fps": 4, "loop": true },
+      { "name": "move", "row": 1, "frames": 6, "fps": 10, "loop": true },
+      { "name": "fire", "row": 2, "frames": 4, "fps": 12, "loop": false },
+      { "name": "melee", "row": 3, "frames": 5, "fps": 12, "loop": false }
+    ]},
+    { "id": "SW02", "texture": "StellarCommanderArt/Units/T_SW02", "states": [
+      { "name": "idle", "row": 0, "frames": 4, "fps": 4, "loop": true }, { "name": "move", "row": 1, "frames": 6, "fps": 10, "loop": true }, { "name": "fire", "row": 2, "frames": 4, "fps": 12, "loop": false }, { "name": "melee", "row": 3, "frames": 5, "fps": 12, "loop": false }
+    ]},
+    { "id": "BW03", "texture": "StellarCommanderArt/Units/T_BW03", "states": [
+      { "name": "idle", "row": 0, "frames": 4, "fps": 4, "loop": true }, { "name": "move", "row": 1, "frames": 6, "fps": 10, "loop": true }, { "name": "fire", "row": 2, "frames": 4, "fps": 12, "loop": false }, { "name": "melee", "row": 3, "frames": 5, "fps": 12, "loop": false }
+    ]},
+    { "id": "PL00", "texture": "StellarCommanderArt/Units/T_PL00", "states": [
+      { "name": "idle", "row": 0, "frames": 4, "fps": 4, "loop": true }, { "name": "move", "row": 1, "frames": 6, "fps": 10, "loop": true }, { "name": "fire", "row": 2, "frames": 4, "fps": 12, "loop": false }, { "name": "melee", "row": 3, "frames": 5, "fps": 12, "loop": false }
+    ]},
+    { "id": "GR01", "texture": "StellarCommanderArt/Units/T_GR01", "states": [
+      { "name": "idle", "row": 0, "frames": 4, "fps": 4, "loop": true }, { "name": "move", "row": 1, "frames": 6, "fps": 10, "loop": true }, { "name": "fire", "row": 2, "frames": 4, "fps": 12, "loop": false }, { "name": "melee", "row": 3, "frames": 5, "fps": 12, "loop": false }
+    ]},
+    { "id": "LC02", "texture": "StellarCommanderArt/Units/T_LC02", "states": [
+      { "name": "idle", "row": 0, "frames": 4, "fps": 4, "loop": true }, { "name": "move", "row": 1, "frames": 6, "fps": 10, "loop": true }, { "name": "fire", "row": 2, "frames": 4, "fps": 12, "loop": false }, { "name": "melee", "row": 3, "frames": 5, "fps": 12, "loop": false }
+    ]},
+    { "id": "WL03", "texture": "StellarCommanderArt/Units/T_WL03", "states": [
+      { "name": "idle", "row": 0, "frames": 4, "fps": 4, "loop": true }, { "name": "move", "row": 1, "frames": 6, "fps": 10, "loop": true }, { "name": "fire", "row": 2, "frames": 4, "fps": 12, "loop": false }, { "name": "melee", "row": 3, "frames": 5, "fps": 12, "loop": false }
+    ]},
+    { "id": "RP00", "texture": "StellarCommanderArt/Units/T_RP00", "states": [
+      { "name": "idle", "row": 0, "frames": 4, "fps": 4, "loop": true }, { "name": "move", "row": 1, "frames": 6, "fps": 10, "loop": true }, { "name": "fire", "row": 2, "frames": 4, "fps": 12, "loop": false }, { "name": "melee", "row": 3, "frames": 5, "fps": 12, "loop": false }
+    ]}
+  ],
+  "scenery": [
+    { "id": "space-v1", "texture": "StellarCommanderArt/Scenery/ENV_SpaceBackground", "width": 256, "height": 224 }
+  ]
+}

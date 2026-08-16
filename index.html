@@ -3,32 +3,57 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0e1116">
+<meta name="description" content="回合制六角格戰略加即時 2D 混戰的原創復古網頁遊戲，支援桌機鍵盤與手機觸控。">
 <title>星域指揮官 STELLAR COMMANDER</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2307070d'/%3E%3Crect x='4' y='3' width='8' height='7' fill='%23e8eefc'/%3E%3Crect x='4' y='6' width='8' height='3' fill='%23181828'/%3E%3Crect x='5' y='6' width='2' height='2' fill='%23f5c542'/%3E%3Crect x='9' y='6' width='2' height='2' fill='%23f5c542'/%3E%3Crect x='2' y='1' width='2' height='2' fill='%23f5c542'/%3E%3Crect x='12' y='1' width='2' height='2' fill='%23f5c542'/%3E%3Crect x='5' y='10' width='6' height='4' fill='%233a6ad0'/%3E%3C/svg%3E">
 <style>
-  :root{ --bg:#07070d; --panel:#12121f; --line:#2a2a44; --txt:#c9d4e8; --dim:#7c88a6; --hi:#f5c542; }
+  :root{
+    --bg:#0e1116; --panel:#171c24; --panel-hover:#1e2530; --well:#090c12;
+    --line:#2a3342; --txt:#e8edf4; --dim:#8b97a8; --accent:#5eead4; --hi:#f5c542;
+  }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--txt);
-    font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;}
-  #wrap{display:flex;flex-direction:column;align-items:center;gap:14px;padding:18px 12px 40px}
-  #stage{position:relative;line-height:0;isolation:isolate;box-shadow:0 0 0 2px #6775a0,0 0 0 5px #151a31,0 12px 40px #000a,0 0 36px #40508026;}
+  html,body{margin:0;min-height:100%;background:var(--bg);color:var(--txt);
+    font-family:"Microsoft JhengHei UI","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;}
+  body{padding:32px 20px 56px}
+  a{color:inherit}
+  .site-shell{width:min(100%,1080px);margin:0 auto}
+  .site-header{margin-bottom:20px}
+  .topline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+  .back-link,.repo-link{color:var(--dim);font-size:13px;text-decoration:none;border-bottom:1px dotted var(--dim)}
+  .back-link:hover,.repo-link:hover{color:var(--txt)}
+  .eyebrow{display:block;margin-bottom:8px;color:var(--accent);font-size:11px;letter-spacing:.2em;font-weight:700}
+  h1{font-size:clamp(25px,4vw,42px);line-height:1.08;letter-spacing:.08em;margin:0;color:var(--txt)}
+  h1 span{display:block;margin-top:8px;color:var(--dim);font-size:.42em;letter-spacing:.18em;font-weight:500}
+  .lede{max-width:720px;margin:14px 0 0;color:var(--dim);font-size:14px;line-height:1.75}
+  .play-card,.card{background:var(--panel);border:1px solid var(--line);border-radius:14px}
+  .play-card{padding:18px;margin-bottom:16px}
+  .play-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
+  .play-head h2{margin:3px 0 0;font-size:17px;letter-spacing:.08em}
+  .section-tag{color:var(--accent);font-size:10px;letter-spacing:.18em}
+  .status-list{display:flex;justify-content:flex-end;gap:7px;flex-wrap:wrap}
+  .status-chip{padding:5px 9px;border:1px solid var(--line);border-radius:999px;color:var(--dim);font-size:11px;white-space:nowrap}
+  .status-chip.live{border-color:#285e58;color:var(--accent);background:#102623}
+  .game-viewport{width:100%;overflow:hidden;padding:16px 14px;background:var(--well);border:1px solid #202733;border-radius:10px}
+  #stage{position:relative;width:max-content;max-width:100%;margin:0 auto;line-height:0;isolation:isolate;box-shadow:0 0 0 2px #6775a0,0 0 0 5px #151a31,0 12px 40px #000a,0 0 36px #40508026;}
   #stage::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
     background:repeating-linear-gradient(180deg,transparent 0 3px,#02030a18 3px 4px);mix-blend-mode:multiply;}
   canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges;}
   #ui{position:absolute;left:0;top:0;pointer-events:none;image-rendering:auto;}
-  h1{font-size:18px;letter-spacing:.28em;margin:0;color:var(--hi);font-weight:700}
-  h1 small{display:block;font-size:11px;letter-spacing:.12em;color:var(--dim);margin-top:6px;font-weight:400}
-  .mobile-title{display:none}
-  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;max-width:840px;width:100%}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
-  .card h2{font-size:12px;letter-spacing:.16em;color:var(--hi);margin:0 0 8px}
+  #hint{min-height:24px;padding:10px 4px 0;text-align:center;font-size:12.5px;color:var(--hi);letter-spacing:.04em}
+  .play-note{margin:8px 0 0;text-align:center;color:var(--dim);font-size:11.5px;line-height:1.6}
+  .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;width:100%}
+  .card{padding:16px;transition:border-color .15s,background .15s,transform .15s}
+  .card:hover{background:var(--panel-hover);border-color:#465267;transform:translateY(-2px)}
+  .card h2{font-size:12px;letter-spacing:.16em;color:var(--accent);margin:0 0 9px}
   .card p,.card li{font-size:12.5px;line-height:1.75;color:var(--txt);margin:0}
   .card ul{margin:0;padding-left:1.1em}
   kbd{background:#20203a;border:1px solid #3a3a5e;border-bottom-width:2px;border-radius:4px;
     padding:1px 6px;font-family:ui-monospace,monospace;font-size:11px;color:#fff}
   .dim{color:var(--dim);font-size:11.5px}
-  #hint{min-height:20px;font-size:12.5px;color:var(--hi);letter-spacing:.04em}
-  #touch-controls{display:none;width:min(100%,540px);grid-template-columns:132px 1fr;gap:16px;align-items:center;touch-action:none;user-select:none;-webkit-user-select:none}
+  .site-footer{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:22px;color:var(--dim);font-size:11.5px;line-height:1.6}
+  .site-footer p{margin:0;max-width:760px}
+  #touch-controls{display:none;width:min(100%,540px);margin:4px auto 0;grid-template-columns:132px 1fr;gap:16px;align-items:center;touch-action:none;user-select:none;-webkit-user-select:none}
   .touch-dpad{display:grid;grid-template-columns:repeat(3,42px);grid-template-rows:repeat(3,42px);gap:3px}
   .touch-actions{display:grid;grid-template-columns:repeat(3,minmax(48px,58px));gap:7px;justify-content:end;align-items:center}
   .touch-btn{height:42px;border:1px solid #465074;border-bottom:4px solid #252d4d;border-radius:9px;background:#1b223c;color:#eef4ff;font:700 15px/1 system-ui,sans-serif;touch-action:none}
@@ -36,12 +61,19 @@
   .touch-btn.action{height:50px;border-color:#7a6330;background:#2b261b;color:#ffe680}
   .touch-btn.start{grid-column:2/4;height:34px;color:#a9b8d8;font-size:11px;letter-spacing:.1em}
   .touch-btn.on{transform:translateY(2px);border-bottom-width:2px;background:#344066;color:#fff}
+  @media (max-width:820px){
+    .cols{grid-template-columns:1fr}
+  }
   @media (pointer:coarse),(max-width:700px){
-    #wrap{padding-top:12px;gap:11px}
+    body{padding:18px 12px 40px}
+    .topline{margin-bottom:18px}
+    .repo-link{display:none}
+    .play-card{padding:12px}
+    .play-head{display:block}
+    .status-list{justify-content:flex-start;margin-top:10px}
+    .game-viewport{padding:12px 10px}
     #touch-controls{display:grid}
-    h1{font-size:16px;text-align:center}
-    h1 small{font-size:9px}
-    .desktop-title{display:none}.mobile-title{display:inline}
+    .play-note{font-size:10.5px}
   }
   @media (max-width:380px){
     #touch-controls{grid-template-columns:120px 1fr;gap:9px}
@@ -49,33 +81,60 @@
     .touch-btn{height:38px}
     .touch-actions{grid-template-columns:repeat(3,minmax(43px,52px));gap:5px}
   }
+  @media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
 </style>
 </head>
 <body>
-<div id="wrap">
-  <h1>星域指揮官<small><span class="desktop-title">STELLAR COMMANDER — 致敬 SD 鋼彈 GX (SFC, 1994)</span><span class="mobile-title">STELLAR COMMANDER</span></small></h1>
-  <div id="stage">
-    <canvas id="game" width="256" height="224"></canvas>
-    <canvas id="ui"></canvas>
-  </div>
-  <div id="hint"></div>
-  <div id="touch-controls" aria-label="手機觸控操作">
-    <div class="touch-dpad" aria-label="方向鍵">
-      <span></span><button class="touch-btn" type="button" data-input="up" aria-label="上">▲</button><span></span>
-      <button class="touch-btn" type="button" data-input="left" aria-label="左">◀</button><span></span><button class="touch-btn" type="button" data-input="right" aria-label="右">▶</button>
-      <span></span><button class="touch-btn" type="button" data-input="down" aria-label="下">▼</button><span></span>
+<div class="site-shell">
+  <header class="site-header">
+    <div class="topline">
+      <a class="back-link" href="/" aria-label="返回 treefar 專案導航">← treefar ／專案導航</a>
+      <a class="repo-link" href="https://github.com/treefar/stellar-commander" target="_blank" rel="noreferrer">GitHub repo ↗</a>
     </div>
-    <div class="touch-actions" aria-label="動作鍵">
-      <button class="touch-btn action" type="button" data-input="a" aria-label="A 確定或武器一">A<small>確定／武1</small></button>
-      <button class="touch-btn action" type="button" data-input="b" aria-label="B 取消或武器二">B<small>取消／武2</small></button>
-      <button class="touch-btn action" type="button" data-input="c" aria-label="C 選單或武器三">C<small>選單／武3</small></button>
-      <button class="touch-btn action" type="button" data-input="d" aria-label="D 武器四">D<small>武器4</small></button>
-      <button class="touch-btn start" type="button" data-input="start" aria-label="開始或暫停">START／暫停</button>
-    </div>
-  </div>
+    <span class="eyebrow">GAME × STRATEGY</span>
+    <h1>星域指揮官<span>STELLAR COMMANDER</span></h1>
+    <p class="lede">回合制六角格搶地盤，兩軍接觸就切換成即時 2D 混戰。完成四段作戰目標、培養 ACE 機體，打一場約十五分鐘的完整戰局。</p>
+  </header>
 
-  <div class="cols">
-    <div class="card">
+  <main>
+    <section class="play-card" aria-labelledby="play-title">
+      <div class="play-head">
+        <div>
+          <span class="section-tag">LIVE WEB BUILD</span>
+          <h2 id="play-title">戰術終端</h2>
+        </div>
+        <div class="status-list" aria-label="版本能力">
+          <span class="status-chip live">● 可直接遊玩</span>
+          <span class="status-chip">桌機鍵盤</span>
+          <span class="status-chip">手機觸控</span>
+        </div>
+      </div>
+      <div class="game-viewport">
+        <div id="stage">
+          <canvas id="game" width="256" height="224" aria-label="星域指揮官遊戲畫面"></canvas>
+          <canvas id="ui" aria-hidden="true"></canvas>
+        </div>
+      </div>
+      <div id="hint" role="status" aria-live="polite"></div>
+      <div id="touch-controls" aria-label="手機觸控操作">
+        <div class="touch-dpad" aria-label="方向鍵">
+          <span></span><button class="touch-btn" type="button" data-input="up" aria-label="上">▲</button><span></span>
+          <button class="touch-btn" type="button" data-input="left" aria-label="左">◀</button><span></span><button class="touch-btn" type="button" data-input="right" aria-label="右">▶</button>
+          <span></span><button class="touch-btn" type="button" data-input="down" aria-label="下">▼</button><span></span>
+        </div>
+        <div class="touch-actions" aria-label="動作鍵">
+          <button class="touch-btn action" type="button" data-input="a" aria-label="A 確定或武器一">A<small>確定／武1</small></button>
+          <button class="touch-btn action" type="button" data-input="b" aria-label="B 取消或武器二">B<small>取消／武2</small></button>
+          <button class="touch-btn action" type="button" data-input="c" aria-label="C 選單或武器三">C<small>選單／武3</small></button>
+          <button class="touch-btn action" type="button" data-input="d" aria-label="D 武器四">D<small>武器4</small></button>
+          <button class="touch-btn start" type="button" data-input="start" aria-label="開始或暫停">START／暫停</button>
+        </div>
+      </div>
+      <p class="play-note">首次按鍵或點擊後啟用音效。進度會儲存在目前瀏覽器。</p>
+    </section>
+
+    <section class="cols" aria-label="遊戲說明">
+      <article class="card">
       <h2>戰略地圖 操作</h2>
       <ul>
         <li><kbd>↑↓←→</kbd> 移動游標</li>
@@ -84,8 +143,8 @@
         <li><kbd>C</kbd> 系統選單（結束回合／存檔）</li>
       </ul>
       <p class="dim" style="margin-top:8px">選好單位後，藍格＝可移動，紅格＝可攻擊。站上工廠或都市可佔領。</p>
-    </div>
-    <div class="card">
+      </article>
+      <article class="card">
       <h2>即時戰鬥 操作</h2>
       <ul>
         <li><kbd>↑↓←→</kbd> 推進（太空有慣性）</li>
@@ -96,8 +155,8 @@
         <li><kbd>Enter</kbd> 暫停</li>
       </ul>
       <p class="dim" style="margin-top:8px">60 秒倒數。一方全滅或時間到就結束，剩餘 HP 會帶回地圖。</p>
-    </div>
-    <div class="card">
+      </article>
+      <article class="card">
       <h2>怎麼贏</h2>
       <ul>
         <li>佔領敵方全部工廠，或殲滅敵方全部單位</li>
@@ -106,13 +165,19 @@
         <li>完成四段作戰目標，累積資金並培養 ACE 機體</li>
       </ul>
       <p class="dim" style="margin-top:8px">TEC 2 出重裝機、TEC 3 出王牌機；受損機體停在己方工廠，每回合會維修 20%。</p>
-    </div>
-  </div>
-  <p class="dim" style="max-width:840px">機體外形與名稱皆為原創設計，僅在比例與機能語彙上致敬 SD 機器人類型。</p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>機體外形與名稱皆為原創設計，僅在比例與機能語彙上致敬 SD 機器人類型。</p>
+    <span>WEB BUILD · 2026</span>
+  </footer>
 </div>
 
 <script src="js/core.js"></script>
 <script src="js/sprites.js"></script>
+<script src="js/artpack.js"></script>
 <script src="js/audio.js"></script>
 <script src="js/units.js"></script>
 <script src="js/hex.js"></script>

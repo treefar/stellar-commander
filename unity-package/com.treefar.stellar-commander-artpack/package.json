@@ -1,0 +1,10 @@
+{
+  "name": "com.treefar.stellar-commander-artpack",
+  "version": "0.1.0",
+  "displayName": "Stellar Commander Art Pack",
+  "description": "ImageGen-authored 32 PPU mecha animation atlases and animated pixel-space scenery shared with the Stellar Commander web game.",
+  "unity": "6000.0",
+  "author": {
+    "name": "Treefar"
+  }
+}

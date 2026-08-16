@@ -113,7 +113,21 @@ const UnitDB = {
     return UNIT_DEFS.filter(u => u.side === side && u.tec <= tec);
   },
   get(id) { return this.byId[id]; },
-  spr(id) { return this.sprites[id]; }
+  spr(id) { return this.sprites[id]; },
+  frame(id, state, face, tick, progress, flash) {
+    const formal = typeof ArtPack !== 'undefined' && ArtPack.frame(id, state, face, tick, progress, flash);
+    if (formal) return formal;
+    const set = this.sprites[id];
+    const pose = state === 'fire' || state === 'melee' ? state : 'idle';
+    if (flash) return face < 0 ? set.flash.l : set.flash.r;
+    return face < 0 ? set[pose].l : set[pose].r;
+  },
+  miniFrame(id, state, face, tick, progress) {
+    const formal = typeof ArtPack !== 'undefined' && ArtPack.mini(id, state, face, tick, progress);
+    if (formal) return formal;
+    const set = this.sprites[id];
+    return face < 0 ? set.mini.l : set.mini.r;
+  }
 };
 
 if (typeof module !== 'undefined') module.exports = { UNIT_DEFS };

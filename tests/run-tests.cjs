@@ -6,6 +6,8 @@ const H = require(path.join(__dirname, '..', 'js', 'hex.js'));
 const C = require(path.join(__dirname, '..', 'js', 'combat.js'));
 const U = require(path.join(__dirname, '..', 'js', 'units.js'));
 const P = require(path.join(__dirname, '..', 'js', 'progression.js'));
+const A = require(path.join(__dirname, '..', 'js', 'artpack.js'));
+const fs = require('fs');
 
 let pass = 0, fail = 0;
 function ok(name, cond, extra) {
@@ -133,6 +135,40 @@ console.log('\n[6] 長線成長與 15 分鐘節奏');
   ok('起始 4 設施尚未完成先遣擴張', !P.operationProgress(0, { facilities: 4 }).done);
   ok('控制第 5 座設施完成先遣擴張', P.operationProgress(0, { facilities: 5 }).done);
   ok('兩場勝利才完成前線交鋒', !P.operationProgress(1, { battleWins: 1 }).done && P.operationProgress(1, { battleWins: 2 }).done);
+}
+
+console.log('\n[7] 正式美術動畫時間軸');
+{
+  const loop = { frames: 4, fps: 4, loop: true };
+  eq('4 FPS 起始幀', A.artFrameIndex(loop, 0), 0);
+  eq('4 FPS 每 15 tick 換幀', A.artFrameIndex(loop, 15), 1);
+  eq('循環會回到第 1 幀', A.artFrameIndex(loop, 60), 0);
+  const attack = { frames: 5, fps: 12, loop: false };
+  eq('動作進度 0% 是第 1 幀', A.artFrameIndex(attack, 0, 0), 0);
+  eq('動作進度 60% 是第 4 幀', A.artFrameIndex(attack, 0, 0.6), 3);
+  eq('非循環動作停在末幀', A.artFrameIndex(attack, 999), 4);
+}
+
+console.log('\n[8] Unity 共用美術包契約');
+{
+  const pkgRoot = path.join(__dirname, '..', 'unity-package', 'com.treefar.stellar-commander-artpack');
+  const manifestPath = path.join(pkgRoot, 'Runtime', 'Resources', 'StellarCommanderArt', 'unity-artpack.json');
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  const pngSize = p => {
+    const b = fs.readFileSync(p);
+    return [b.readUInt32BE(16), b.readUInt32BE(20)];
+  };
+  eq('Unity package 識別字', JSON.parse(fs.readFileSync(path.join(pkgRoot, 'package.json'), 'utf8')).name, 'com.treefar.stellar-commander-artpack');
+  eq('Unity 機體數 = 8', manifest.units.length, 8);
+  ok('Unity 每台都有 4 個狀態與 4/6/4/5 幀', manifest.units.every(u => JSON.stringify(u.states.map(s => s.frames)) === '[4,6,4,5]'));
+  const resourceRoot = path.join(pkgRoot, 'Runtime', 'Resources');
+  ok('Unity 八張 atlas 都是 192x128', manifest.units.every(u => {
+    const file = path.join(resourceRoot, u.texture + '.png');
+    return fs.existsSync(file) && JSON.stringify(pngSize(file)) === '[192,128]';
+  }));
+  const bg = manifest.scenery[0];
+  const bgFile = path.join(resourceRoot, bg.texture + '.png');
+  ok('Unity 正式背景是 256x224', fs.existsSync(bgFile) && JSON.stringify(pngSize(bgFile)) === '[256,224]');
 }
 
 console.log(`\n結果：${pass} 通過 / ${fail} 失敗\n`);

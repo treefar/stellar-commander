@@ -4,6 +4,10 @@
 # 自動驗證產生的截圖（可用 tools/devserver.mjs 重新產生）
 shots/
 
+# 美術生成工作區與本機 QA 紀錄；正式來源紀錄與 runtime 另行進版控
+assets/artpack/runs/
+artifacts/qa/
+
 # 系統與編輯器
 Thumbs.db
 desktop.ini

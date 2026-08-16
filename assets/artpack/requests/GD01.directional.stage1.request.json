@@ -1,0 +1,21 @@
+{
+  "cell": { "shape": "square", "size": 32, "safe_margin": 2 },
+  "fit": {
+    "pixel_unfake": true,
+    "logical_height": 32,
+    "palette_size": 15,
+    "detail_bias": true,
+    "outline": 0.62,
+    "align_x": "foot-centroid",
+    "align_y": "bottom",
+    "ground_frames": true
+  },
+  "states": {
+    "side_idle": {
+      "frames": 4,
+      "fps": 4,
+      "loop": true,
+      "action": "extremely subtle screen-right mechanical idle: preserve the exact same stance, silhouette, compact rifle position and foot baseline in all frames; only alternate a one logical-pixel visor sensor blink and backpack vent pulse; no limb movement and no body-size change"
+    }
+  }
+}

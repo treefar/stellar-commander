@@ -72,6 +72,7 @@ const Game = {
   },
 
   drawMenuSpace(ctx, spd) {
+    if (ArtPack.drawBackground(ctx, this.t, spd || 0.04)) return;
     for (const c of this.menuClouds || []) {
       const drift = ((this.t * (spd || 0.04) + c.x) % (GW + c.s)) - c.s;
       ctx.drawImage(c.img, drift | 0, c.y, c.s, c.s);
@@ -111,9 +112,8 @@ const Game = {
     // 機體展示
     const ids = ['GD01', 'SW02', 'BW03', 'PL00', 'RP00', 'WL03', 'LC02', 'GR01'];
     ids.forEach((id, i) => {
-      const set = UnitDB.spr(id);
       const x = 12 + i * 30, y = 96 + Math.sin(this.t * 0.04 + i) * 3;
-      ctx.drawImage(i < 4 ? set.idle.r : set.idle.l, x, y | 0);
+      ctx.drawImage(UnitDB.frame(id, 'idle', i < 4 ? 1 : -1, this.t + i * 7), x, y | 0);
     });
 
     const items = ['NEW GAME', 'HOW TO PLAY'];
@@ -254,21 +254,19 @@ const Game = {
     // 我方（左）
     const mine = v.blue.slice(0, 4);
     mine.forEach((u, i) => {
-      const set = UnitDB.spr(u.id);
       const bob = Math.sin(v.t * 0.06 + i) * 2;
       const x = 26 + i * 14, y = 108 + i * 16 + bob;
       ctx.save();
       if (u === v.playerUnit) { ctx.shadowColor = '#5aa8ff'; ctx.shadowBlur = 6; }
-      ctx.drawImage(set.idle.r, x | 0, y | 0);
+      ctx.drawImage(UnitDB.frame(u.id, 'idle', 1, v.t + i * 9), x | 0, y | 0);
       ctx.restore();
     });
     // 敵方（右，弧形排列，仿原作）
     v.red.slice(0, 6).forEach((u, i) => {
-      const set = UnitDB.spr(u.id);
       const a = -0.7 + i * 0.34;
       const x = 168 + Math.cos(a) * 46 + (i % 2) * 6;
       const y = 118 + Math.sin(a) * 52;
-      ctx.drawImage(set.idle.l, x | 0, (y + Math.sin(v.t * 0.05 + i) * 2) | 0);
+      ctx.drawImage(UnitDB.frame(u.id, 'idle', -1, v.t + i * 9), x | 0, (y + Math.sin(v.t * 0.05 + i) * 2) | 0);
     });
 
     // 中央 VS
@@ -307,9 +305,11 @@ const Game = {
   }
 };
 
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
+  await ArtPack.init();
   Game.init();
   window.__game = Game;      // 測試鉤子
   window.__strat = Strat;
   window.__battle = Battle;
+  window.__artpack = ArtPack;
 });
