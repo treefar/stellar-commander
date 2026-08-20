@@ -1,0 +1,93 @@
+{
+  "ok": true,
+  "engine": "component-row",
+  "curation_applied": false,
+  "frame_variant": "pixel",
+  "errors": [],
+  "atlas": "sprite-sheet-alpha.png",
+  "manifest": "manifest.json",
+  "cell": {
+    "shape": "square",
+    "width": 32,
+    "height": 32,
+    "safe_margin_x": 4,
+    "safe_margin_y": 4,
+    "size": 32,
+    "safe_margin": 4
+  },
+  "states": [
+    "idle"
+  ],
+  "cells": [
+    {
+      "state": "idle",
+      "frame": 0,
+      "nontransparent_pixels": 411,
+      "x": 0,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "state": "idle",
+      "frame": 1,
+      "nontransparent_pixels": 404,
+      "x": 32,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "state": "idle",
+      "frame": 2,
+      "nontransparent_pixels": 403,
+      "x": 64,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    },
+    {
+      "state": "idle",
+      "frame": 3,
+      "nontransparent_pixels": 402,
+      "x": 96,
+      "y": 0,
+      "w": 32,
+      "h": 32
+    }
+  ],
+  "frame_layout": {
+    "sheetWidth": 128,
+    "sheetHeight": 32,
+    "cellWidth": 32,
+    "cellHeight": 32,
+    "rows": {
+      "idle": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 32,
+          "y": 0,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 64,
+          "y": 0,
+          "w": 32,
+          "h": 32
+        },
+        {
+          "x": 96,
+          "y": 0,
+          "w": 32,
+          "h": 32
+        }
+      ]
+    }
+  }
+}

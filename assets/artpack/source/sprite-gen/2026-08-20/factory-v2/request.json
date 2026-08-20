@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "kind": "sprite-gen-request",
+  "engine": "component-row",
+  "style": "Match the attached canonical 24px sprite exactly: original 16-bit console pixel art, hard edges, restrained navy gray amber palette, no antialiasing",
+  "cell": { "shape": "square", "size": 32, "safe_margin": 4 },
+  "fit": {
+    "pixel_unfake": true,
+    "logical_height": 32,
+    "palette_size": 24,
+    "align_x": "alpha-centroid",
+    "align_y": "bottom",
+    "ground_frames": true,
+    "outline": 0.62,
+    "pitch_hint": 8
+  },
+  "states": {
+    "idle": {
+      "frames": 4,
+      "fps": 4,
+      "loop": true,
+      "action": "stationary orbital factory with identical geometry in all frames; only the three small amber indicator lamps animate in a seamless off, dim, bright, dim cycle; no movement of the building"
+    }
+  }
+}

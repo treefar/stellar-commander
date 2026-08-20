@@ -63,6 +63,7 @@ with sync_playwright() as p:
             artFailures: __artpack.failures.slice(),
             artPacks: Object.keys(__artpack.packs).length,
             scenery: Object.keys(__artpack.scenery).length,
+            facilities: Object.keys(__artpack.facilities).length,
             state: __game.state
           };
         }"""
@@ -106,6 +107,7 @@ with sync_playwright() as p:
             artFailures: __artpack.failures.slice(),
             artPacks: Object.keys(__artpack.packs).length,
             scenery: Object.keys(__artpack.scenery).length,
+            facilities: Object.keys(__artpack.facilities).length,
             state: __game.state
           };
         }"""
@@ -125,6 +127,7 @@ assert desktop_metrics["cards"] == 3, desktop_metrics
 assert desktop_metrics["touch"] == "none", desktop_metrics
 assert desktop_metrics["artFailures"] == [], desktop_metrics
 assert desktop_metrics["artPacks"] == 8 and desktop_metrics["scenery"] == 1, desktop_metrics
+assert desktop_metrics["facilities"] == 2, desktop_metrics
 assert desktop_state_after_key == "setup", desktop_state_after_key
 
 assert mobile_metrics["scrollWidth"] <= mobile_metrics["viewport"], mobile_metrics
@@ -137,6 +140,7 @@ assert mobile_metrics["touch"]["left"] >= 0, mobile_metrics
 assert mobile_metrics["touch"]["right"] <= mobile_metrics["viewport"], mobile_metrics
 assert mobile_metrics["artFailures"] == [], mobile_metrics
 assert mobile_metrics["artPacks"] == 8 and mobile_metrics["scenery"] == 1, mobile_metrics
+assert mobile_metrics["facilities"] == 2, mobile_metrics
 assert mobile_state_after_touch == "setup", mobile_state_after_touch
 assert all(status < 400 for status in link_statuses.values()), link_statuses
 assert image_responses and all(status < 400 for status, _ in image_responses), image_responses

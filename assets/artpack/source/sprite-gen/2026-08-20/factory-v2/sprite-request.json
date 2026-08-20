@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "kind": "sprite-gen-request",
+  "engine": "component-row",
+  "character": {
+    "id": "facility-factory",
+    "description": "Original compact orbital factory with amber indicator lamps",
+    "base_image": "base-source.png"
+  },
+  "cell": {
+    "shape": "square",
+    "width": 32,
+    "height": 32,
+    "safe_margin_x": 4,
+    "safe_margin_y": 4,
+    "size": 32,
+    "safe_margin": 4
+  },
+  "chroma_key": {
+    "name": "green",
+    "hex": "#00FF00",
+    "rgb": [
+      0,
+      255,
+      0
+    ],
+    "selection": "manual"
+  },
+  "states": {
+    "idle": {
+      "frames": 4,
+      "fps": 4,
+      "loop": true,
+      "action": "stationary orbital factory with identical geometry in all frames; only the three small amber indicator lamps animate in a seamless off, dim, bright, dim cycle; no movement of the building"
+    }
+  },
+  "style": "Match the attached canonical 24px sprite exactly: original 16-bit console pixel art, hard edges, restrained navy gray amber palette, no antialiasing",
+  "motion_phase_guides": false,
+  "layout": "taxonomy/v1",
+  "fit": {
+    "pixel_unfake": true,
+    "logical_height": 32,
+    "palette_size": 24,
+    "align_x": "alpha-centroid",
+    "align_y": "bottom",
+    "ground_frames": true,
+    "outline": 0.62,
+    "pitch_hint": 8
+  },
+  "chroma": {
+    "mode": "rgb",
+    "unmix_reach": 4,
+    "spill_max_fraction": 0.005
+  }
+}

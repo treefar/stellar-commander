@@ -32,6 +32,14 @@
       { "name": "idle", "row": 0, "frames": 4, "fps": 4, "loop": true }, { "name": "move", "row": 1, "frames": 6, "fps": 10, "loop": true }, { "name": "fire", "row": 2, "frames": 4, "fps": 12, "loop": false }, { "name": "melee", "row": 3, "frames": 5, "fps": 12, "loop": false }
     ]}
   ],
+  "facilities": [
+    { "id": "factory", "texture": "StellarCommanderArt/Facilities/T_Factory", "states": [
+      { "name": "idle", "row": 0, "frames": 4, "fps": 4, "loop": true }
+    ]},
+    { "id": "city", "texture": "StellarCommanderArt/Facilities/T_City", "states": [
+      { "name": "idle", "row": 0, "frames": 4, "fps": 4, "loop": true }
+    ]}
+  ],
   "scenery": [
     { "id": "space-v1", "texture": "StellarCommanderArt/Scenery/ENV_SpaceBackground", "width": 256, "height": 224 }
   ]

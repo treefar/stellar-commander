@@ -9,6 +9,7 @@ namespace Treefar.StellarCommanderArt
         private const string ManifestPath = "StellarCommanderArt/unity-artpack";
         private static StellarArtPackData _data;
         private static readonly Dictionary<string, UnitRuntime> Units = new();
+        private static readonly Dictionary<string, FacilityRuntime> Facilities = new();
         private static readonly Dictionary<string, Sprite> Scenery = new();
 
         private sealed class UnitRuntime
@@ -18,6 +19,19 @@ namespace Treefar.StellarCommanderArt
             public readonly Dictionary<string, Sprite[]> States = new();
 
             public UnitRuntime(StellarArtPackData.UnitDef def, Texture2D texture)
+            {
+                Def = def;
+                Texture = texture;
+            }
+        }
+
+        private sealed class FacilityRuntime
+        {
+            public readonly StellarArtPackData.FacilityDef Def;
+            public readonly Texture2D Texture;
+            public readonly Dictionary<string, Sprite[]> States = new();
+
+            public FacilityRuntime(StellarArtPackData.FacilityDef def, Texture2D texture)
             {
                 Def = def;
                 Texture = texture;
@@ -43,6 +57,22 @@ namespace Treefar.StellarCommanderArt
                 if (state == null) return null;
                 frames = BuildFrames(unit.Texture, state);
                 unit.States.Add(stateName, frames);
+            }
+            return frames[Mathf.Clamp(frameIndex, 0, frames.Length - 1)];
+        }
+
+        public static Sprite GetFacilityFrame(string facilityId, string stateName, int frameIndex)
+        {
+            FacilityRuntime facility = GetFacility(facilityId);
+            if (facility == null) return null;
+            if (!facility.States.TryGetValue(stateName, out Sprite[] frames))
+            {
+                StellarArtPackData.StateDef state = null;
+                foreach (StellarArtPackData.StateDef candidate in facility.Def.states)
+                    if (candidate.name == stateName) { state = candidate; break; }
+                if (state == null) return null;
+                frames = BuildFrames(facility.Texture, state);
+                facility.States.Add(stateName, frames);
             }
             return frames[Mathf.Clamp(frameIndex, 0, frames.Length - 1)];
         }
@@ -82,6 +112,25 @@ namespace Treefar.StellarCommanderArt
                 UnitRuntime unit = new(def, texture);
                 Units.Add(unitId, unit);
                 return unit;
+            }
+            return null;
+        }
+
+        private static FacilityRuntime GetFacility(string facilityId)
+        {
+            EnsureLoaded();
+            if (Facilities.TryGetValue(facilityId, out FacilityRuntime cached)) return cached;
+            if (_data.facilities == null) return null;
+            foreach (StellarArtPackData.FacilityDef def in _data.facilities)
+            {
+                if (def.id != facilityId) continue;
+                Texture2D texture = Resources.Load<Texture2D>(def.texture);
+                if (texture == null) return null;
+                texture.filterMode = FilterMode.Point;
+                texture.wrapMode = TextureWrapMode.Clamp;
+                FacilityRuntime facility = new(def, texture);
+                Facilities.Add(facilityId, facility);
+                return facility;
             }
             return null;
         }

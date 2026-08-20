@@ -1,0 +1,22 @@
+{
+  "ok": true,
+  "kind": "sprite-gen-score-report",
+  "source_report": "C:\\Projects\\鋼彈復古小遊戲\\assets\\artpack\\source\\sprite-gen\\2026-08-20\\city-v2",
+  "overall_score": 97.0,
+  "candidate_rank": 399,
+  "rows": [
+    {
+      "state": "idle",
+      "score": 97.0,
+      "candidate_rank": 399,
+      "expected_frames": 4,
+      "found_frames": 4,
+      "errors": [],
+      "warnings": [
+        "idle: native logical exceeds the physical cap 32x28 — capped frames (reroll candidates): 0:55x52, 1:55x52, 2:54x52, 3:51x52"
+      ],
+      "hints": []
+    }
+  ],
+  "hints": []
+}

@@ -10,6 +10,7 @@ namespace Treefar.StellarCommanderArt
         public int cellWidth;
         public int cellHeight;
         public UnitDef[] units;
+        public FacilityDef[] facilities;
         public SceneryDef[] scenery;
 
         [Serializable]
@@ -28,6 +29,14 @@ namespace Treefar.StellarCommanderArt
             public int frames;
             public float fps;
             public bool loop;
+        }
+
+        [Serializable]
+        public sealed class FacilityDef
+        {
+            public string id;
+            public string texture;
+            public StateDef[] states;
         }
 
         [Serializable]

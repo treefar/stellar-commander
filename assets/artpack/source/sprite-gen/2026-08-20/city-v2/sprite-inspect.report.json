@@ -1,0 +1,53 @@
+{
+  "ok": true,
+  "engine": "component-row",
+  "kind": "sprite-gen-inspect-report",
+  "run_dir": "C:\\Projects\\鋼彈復古小遊戲\\assets\\artpack\\source\\sprite-gen\\2026-08-20\\city-v2",
+  "states": [
+    "idle"
+  ],
+  "thresholds": {
+    "histogram_min": 0.0,
+    "dhash_min": 0.55,
+    "motion_min": 0.01
+  },
+  "rows": [
+    {
+      "state": "idle",
+      "source": "frames",
+      "expected_frames": 4,
+      "found_frames": 4,
+      "natural_pose_count": 4,
+      "frame_files": [
+        "frames/idle/frame-0.png",
+        "frames/idle/frame-1.png",
+        "frames/idle/frame-2.png",
+        "frames/idle/frame-3.png"
+      ],
+      "metrics": {
+        "histogram_intersection": {
+          "min": 0.9178748231966054,
+          "mean": 0.9521770725459643
+        },
+        "dhash_similarity": {
+          "min": 0.921875,
+          "mean": 0.9505208333333334
+        },
+        "motion_presence": 0.016675123825571896,
+        "centroid_sigma": {
+          "x": 0.2743189213072005,
+          "y": 0.04083318128874366
+        }
+      },
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "idle: native logical exceeds the physical cap 32x28 — capped frames (reroll candidates): 0:55x52, 1:55x52, 2:54x52, 3:51x52"
+      ]
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    "idle: native logical exceeds the physical cap 32x28 — capped frames (reroll candidates): 0:55x52, 1:55x52, 2:54x52, 3:51x52"
+  ]
+}

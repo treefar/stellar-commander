@@ -16,6 +16,7 @@ function artFrameIndex(row, tick, progress) {
 const ArtPack = (() => {
   const packs = {};
   const scenery = {};
+  const facilities = {};
   const failures = [];
 
   function loadImage(url) {
@@ -79,6 +80,29 @@ const ArtPack = (() => {
     scenery[entry.id] = await loadImage(`${root}/${entry.src}`);
   }
 
+  async function loadFacility(entry, root) {
+    const base = `${root}/${entry.path}`;
+    const manifest = await fetch(`${base}/manifest.json`, { cache: 'no-cache' }).then(r => {
+      if (!r.ok) throw new Error(`facility manifest HTTP ${r.status}`);
+      return r.json();
+    });
+    if (manifest.characterId !== `facility-${entry.id}`) throw new Error(`${entry.id} facility manifest 身分不符`);
+    if (manifest.animation.cellWidth !== 32 || manifest.animation.cellHeight !== 32) {
+      throw new Error(`${entry.id} facility 必須是 32x32 cell`);
+    }
+    const spec = manifest.animation.rows.idle;
+    const rects = manifest.frame_layout.rows.idle;
+    if (!spec || spec.frames !== 4 || !rects || rects.length !== 4) {
+      throw new Error(`${entry.id} facility 必須有 4 幀 idle`);
+    }
+    const img = await loadImage(`${base}/${manifest.game_input}`);
+    facilities[entry.id] = {
+      manifest,
+      spec,
+      frames: rects.map(rect => cut(img, rect, false, false, 32))
+    };
+  }
+
   async function init(indexUrl) {
     const url = indexUrl || 'assets/artpack/runtime/artpack.json';
     try {
@@ -89,7 +113,8 @@ const ArtPack = (() => {
       const root = url.slice(0, url.lastIndexOf('/'));
       const unitJobs = index.units.map(u => ({ label: u.id, job: loadUnit(u, root) }));
       const sceneryJobs = (index.scenery || []).map(s => ({ label: `scenery:${s.id}`, job: loadScenery(s, root) }));
-      const jobs = unitJobs.concat(sceneryJobs);
+      const facilityJobs = (index.facilities || []).map(f => ({ label: `facility:${f.id}`, job: loadFacility(f, root) }));
+      const jobs = unitJobs.concat(sceneryJobs, facilityJobs);
       const results = await Promise.allSettled(jobs.map(x => x.job));
       results.forEach((r, i) => {
         if (r.status === 'rejected') failures.push(`${jobs[i].label}: ${r.reason.message}`);
@@ -122,6 +147,12 @@ const ArtPack = (() => {
     return face < 0 ? f.miniL : f.miniR;
   }
 
+  function facility(id, tick) {
+    const pack = facilities[id];
+    if (!pack) return null;
+    return pack.frames[artFrameIndex(pack.spec, tick)] || pack.frames[0];
+  }
+
   function drawBackground(ctx, tick, speed) {
     const img = scenery['space-v1'];
     if (!img) return false;
@@ -142,7 +173,7 @@ const ArtPack = (() => {
     return true;
   }
 
-  return { init, frame, mini, drawBackground, frameIndex: artFrameIndex, packs, scenery, failures };
+  return { init, frame, mini, facility, drawBackground, frameIndex: artFrameIndex, packs, scenery, facilities, failures };
 })();
 
 if (typeof module !== 'undefined') module.exports = { artFrameIndex };

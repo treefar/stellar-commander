@@ -4,6 +4,10 @@
   "scenery": [
     { "id": "space-v1", "src": "scenery/space-background-v1.png" }
   ],
+  "facilities": [
+    { "id": "factory", "path": "facilities/factory" },
+    { "id": "city", "path": "facilities/city" }
+  ],
   "units": [
     { "id": "GD01", "path": "GD01" },
     { "id": "SW02", "manifest": "GD01/manifest.json", "sheet": "GD01/variants/SW02.png", "variantOf": "GD01" },

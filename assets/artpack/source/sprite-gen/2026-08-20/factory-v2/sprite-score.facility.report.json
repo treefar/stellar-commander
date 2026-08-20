@@ -1,0 +1,26 @@
+{
+  "ok": false,
+  "kind": "sprite-gen-score-report",
+  "source_report": "C:\\Projects\\鋼彈復古小遊戲\\assets\\artpack\\source\\sprite-gen\\2026-08-20\\factory-v2",
+  "overall_score": 85.0,
+  "candidate_rank": 399,
+  "rows": [
+    {
+      "state": "idle",
+      "score": 85.0,
+      "candidate_rank": 399,
+      "expected_frames": 4,
+      "found_frames": 4,
+      "errors": [],
+      "warnings": [
+        "idle: native logical exceeds the physical cap 32x28 — capped frames (reroll candidates): 0:60x38, 1:59x38, 2:59x38, 3:59x38"
+      ],
+      "hints": [
+        "idle: Adjacent frames are too similar (motion presence 0.0070). Make the action visibly progress across the row while preserving the same character identity and foot baseline."
+      ]
+    }
+  ],
+  "hints": [
+    "idle: Adjacent frames are too similar (motion presence 0.0070). Make the action visibly progress across the row while preserving the same character identity and foot baseline."
+  ]
+}

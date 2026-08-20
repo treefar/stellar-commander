@@ -5,7 +5,10 @@ const { chromium } = require('playwright');
 const BASE_URL = (process.env.BASE_URL || 'http://localhost:5833').replace(/\/$/, '');
 
 (async () => {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({
+    headless: true,
+    executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+  });
   const page = await browser.newPage({ viewport: { width: 900, height: 900 } });
   const errors = [];
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });

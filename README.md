@@ -36,7 +36,8 @@ node tools/devserver.mjs
 ```
 index.html              入口，含中文操作說明
 js/core.js              256×224 畫布、整數放大、5×7 點陣字型、輸入、中文覆蓋層
-js/sprites.js           程式生成 SD 機體像素圖（無外部圖檔）
+js/sprites.js           正式 atlas 載入失敗時的 legacy 機體 fallback
+js/artpack.js           正式機體／背景／設施 atlas 與 manifest 載入器
 js/audio.js             Web Audio 合成音效與 BGM
 js/units.js             機體資料表
 js/hex.js               六角格數學（odd-r 尖頂）、地圖、ZOC、移動範圍
@@ -47,6 +48,7 @@ js/strategy.js          回合制戰略層
 js/main.js              狀態機：標題→設定→地圖→VS→戰鬥
 tools/devserver.mjs     開發伺服器（附截圖存檔 API）
 tests/                  回歸測試
+assets/artpack/runtime/ 網頁與 Unity 共用的正式 ImageGen／SpriteGen 美術
 shots/                  自動驗證產生的畫面（可刪）
 參考資料/               原作影片逐格截圖（本機參考，未進版控）
 ```

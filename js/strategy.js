@@ -650,20 +650,23 @@ const Strat = {
     // 整格上色：即使有單位站著也看得出歸屬
     ctx.fillStyle = own === 'blue' ? 'rgba(58,120,216,.28)' : own === 'red' ? 'rgba(216,74,58,.28)' : 'rgba(150,150,180,.18)';
     this.fillHex(ctx, x, y);
-    // 圖示畫在六角格下緣，單位（畫在上半）不會完全蓋住
-    if (cell.fac === 'factory') {
+    // 正式設施 atlas 由 manifest 驅動；載入失敗才保留舊程序圖作 survival fallback。
+    const art = ArtPack.facility(cell.fac, this.blink + cell.col * 5 + cell.row * 7);
+    if (art) {
+      ctx.drawImage(art, x - 5, y - 5);
+    } else if (cell.fac === 'factory') {
       ctx.fillStyle = '#0c1020'; ctx.fillRect(x + 5, y + 14, 12, 8);
       ctx.fillStyle = col; ctx.fillRect(x + 5, y + 14, 12, 3);
       ctx.fillStyle = lit; ctx.fillRect(x + 6, y + 18, 2, 2); ctx.fillRect(x + 9, y + 18, 2, 2); ctx.fillRect(x + 12, y + 18, 2, 2);
-      ctx.fillStyle = col; ctx.fillRect(x + 15, y + 11, 2, 3);       // 煙囪
+      ctx.fillStyle = col; ctx.fillRect(x + 15, y + 11, 2, 3);
       ctx.fillStyle = lit; ctx.fillRect(x + 15, y + 11, 2, 1);
     } else {
       ctx.fillStyle = '#0c1020'; ctx.fillRect(x + 5, y + 17, 12, 5);
-      ctx.fillStyle = col; ctx.fillRect(x + 7, y + 13, 8, 4);        // 圓頂
+      ctx.fillStyle = col; ctx.fillRect(x + 7, y + 13, 8, 4);
       ctx.fillStyle = lit; ctx.fillRect(x + 8, y + 13, 6, 1);
       ctx.fillStyle = lit; ctx.fillRect(x + 6, y + 19, 2, 2); ctx.fillRect(x + 11, y + 19, 2, 2);
     }
-    if (own) {
+    if (!art && own) {
       const pulse = (this.blink + cell.col * 5 + cell.row * 7) % 48;
       if (pulse < 12) {
         ctx.fillStyle = lit;

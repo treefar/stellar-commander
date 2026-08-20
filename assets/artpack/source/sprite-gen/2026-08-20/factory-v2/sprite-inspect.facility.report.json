@@ -1,0 +1,53 @@
+{
+  "ok": true,
+  "engine": "component-row",
+  "kind": "sprite-gen-inspect-report",
+  "run_dir": "C:\\Projects\\鋼彈復古小遊戲\\assets\\artpack\\source\\sprite-gen\\2026-08-20\\factory-v2",
+  "states": [
+    "idle"
+  ],
+  "thresholds": {
+    "histogram_min": 0.0,
+    "dhash_min": 0.55,
+    "motion_min": 0.005
+  },
+  "rows": [
+    {
+      "state": "idle",
+      "source": "frames",
+      "expected_frames": 4,
+      "found_frames": 4,
+      "natural_pose_count": 4,
+      "frame_files": [
+        "frames/idle/frame-0.png",
+        "frames/idle/frame-1.png",
+        "frames/idle/frame-2.png",
+        "frames/idle/frame-3.png"
+      ],
+      "metrics": {
+        "histogram_intersection": {
+          "min": 0.972896065577818,
+          "mean": 0.9783794809536126
+        },
+        "dhash_similarity": {
+          "min": 0.890625,
+          "mean": 0.9270833333333334
+        },
+        "motion_presence": 0.0070126602073120915,
+        "centroid_sigma": {
+          "x": 0.15804255555062527,
+          "y": 0.025904270586490148
+        }
+      },
+      "ok": true,
+      "errors": [],
+      "warnings": [
+        "idle: native logical exceeds the physical cap 32x28 — capped frames (reroll candidates): 0:60x38, 1:59x38, 2:59x38, 3:59x38"
+      ]
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    "idle: native logical exceeds the physical cap 32x28 — capped frames (reroll candidates): 0:60x38, 1:59x38, 2:59x38, 3:59x38"
+  ]
+}

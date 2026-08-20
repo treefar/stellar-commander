@@ -149,7 +149,25 @@ console.log('\n[7] 正式美術動畫時間軸');
   eq('非循環動作停在末幀', A.artFrameIndex(attack, 999), 4);
 }
 
-console.log('\n[8] Unity 共用美術包契約');
+console.log('\n[8] 網頁正式設施 atlas 契約');
+{
+  const root = path.join(__dirname, '..', 'assets', 'artpack', 'runtime');
+  const index = JSON.parse(fs.readFileSync(path.join(root, 'artpack.json'), 'utf8'));
+  const pngSize = p => {
+    const b = fs.readFileSync(p);
+    return [b.readUInt32BE(16), b.readUInt32BE(20)];
+  };
+  eq('正式設施數 = 2', index.facilities.length, 2);
+  ok('工廠／都市各有 4 幀 manifest', index.facilities.every(f => {
+    const dir = path.join(root, f.path);
+    const manifest = JSON.parse(fs.readFileSync(path.join(dir, 'manifest.json'), 'utf8'));
+    return manifest.animation.rows.idle.frames === 4 &&
+      manifest.frame_layout.rows.idle.length === 4 &&
+      JSON.stringify(pngSize(path.join(dir, manifest.game_input))) === '[128,32]';
+  }));
+}
+
+console.log('\n[9] Unity 共用美術包契約');
 {
   const pkgRoot = path.join(__dirname, '..', 'unity-package', 'com.treefar.stellar-commander-artpack');
   const manifestPath = path.join(pkgRoot, 'Runtime', 'Resources', 'StellarCommanderArt', 'unity-artpack.json');
@@ -165,6 +183,11 @@ console.log('\n[8] Unity 共用美術包契約');
   ok('Unity 八張 atlas 都是 192x128', manifest.units.every(u => {
     const file = path.join(resourceRoot, u.texture + '.png');
     return fs.existsSync(file) && JSON.stringify(pngSize(file)) === '[192,128]';
+  }));
+  eq('Unity 正式設施數 = 2', manifest.facilities.length, 2);
+  ok('Unity 工廠／都市 atlas 都是 128x32', manifest.facilities.every(f => {
+    const file = path.join(resourceRoot, f.texture + '.png');
+    return fs.existsSync(file) && JSON.stringify(pngSize(file)) === '[128,32]' && f.states[0].frames === 4;
   }));
   const bg = manifest.scenery[0];
   const bgFile = path.join(resourceRoot, bg.texture + '.png');
