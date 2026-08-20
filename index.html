@@ -31,11 +31,19 @@
   .play-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
   .play-head h2{margin:3px 0 0;font-size:17px;letter-spacing:.08em}
   .section-tag{color:var(--accent);font-size:10px;letter-spacing:.18em}
+  .play-tools{display:flex;flex-direction:column;align-items:flex-end;gap:9px}
   .status-list{display:flex;justify-content:flex-end;gap:7px;flex-wrap:wrap}
   .status-chip{padding:5px 9px;border:1px solid var(--line);border-radius:999px;color:var(--dim);font-size:11px;white-space:nowrap}
   .status-chip.live{border-color:#285e58;color:var(--accent);background:#102623}
-  .game-viewport{width:100%;overflow:hidden;padding:16px 14px;background:var(--well);border:1px solid #202733;border-radius:10px}
-  #stage{position:relative;width:max-content;max-width:100%;margin:0 auto;line-height:0;isolation:isolate;box-shadow:0 0 0 2px #6775a0,0 0 0 5px #151a31,0 12px 40px #000a,0 0 36px #40508026;}
+  .display-controls{display:flex;align-items:center;gap:6px;color:var(--dim);font-size:11px}
+  .display-btn{min-width:34px;height:30px;padding:0 10px;border:1px solid #465267;border-radius:6px;background:#202733;color:var(--txt);font:inherit;font-size:12px;font-weight:600;line-height:1;cursor:pointer}
+  .display-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);background:#172a2a}
+  .display-btn:focus-visible{outline:2px solid var(--hi);outline-offset:2px}
+  .display-btn:disabled{opacity:.38;cursor:not-allowed}
+  #zoom-level{min-width:31px;text-align:center;color:var(--hi);font:700 12px/1 ui-monospace,monospace}
+  #fullscreen-toggle{min-width:74px}
+  .game-viewport{width:100%;overflow:auto;padding:16px 14px;background:var(--well);border:1px solid #202733;border-radius:10px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+  #stage{position:relative;width:max-content;margin:0 auto;line-height:0;isolation:isolate;box-shadow:0 0 0 2px #6775a0,0 0 0 5px #151a31,0 12px 40px #000a,0 0 36px #40508026;}
   #stage::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
     background:repeating-linear-gradient(180deg,transparent 0 3px,#02030a18 3px 4px);mix-blend-mode:multiply;}
   canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges;}
@@ -61,6 +69,13 @@
   .touch-btn.action{height:50px;border-color:#7a6330;background:#2b261b;color:#ffe680}
   .touch-btn.start{grid-column:2/4;height:34px;color:#a9b8d8;font-size:11px;letter-spacing:.1em}
   .touch-btn.on{transform:translateY(2px);border-bottom-width:2px;background:#344066;color:#fff}
+  .play-card:fullscreen{width:100vw;height:100vh;max-width:none;margin:0;padding:10px;border:0;border-radius:0;display:flex;flex-direction:column;background:var(--panel)}
+  .play-card:fullscreen .play-head{flex:none;align-items:center;margin-bottom:8px}
+  .play-card:fullscreen .play-head h2{margin:0}
+  .play-card:fullscreen .section-tag,.play-card:fullscreen .status-list,.play-card:fullscreen #hint,.play-card:fullscreen .play-note{display:none}
+  .play-card:fullscreen .game-viewport{flex:1;min-height:0;display:flex;padding:6px}
+  .play-card:fullscreen #stage{flex:none;margin:auto}
+  .play-card:fullscreen #touch-controls{flex:none}
   @media (max-width:820px){
     .cols{grid-template-columns:1fr}
   }
@@ -70,7 +85,8 @@
     .repo-link{display:none}
     .play-card{padding:12px}
     .play-head{display:block}
-    .status-list{justify-content:flex-start;margin-top:10px}
+    .play-tools{align-items:flex-start;margin-top:10px}
+    .status-list{justify-content:flex-start}
     .game-viewport{padding:12px 10px}
     #touch-controls{display:grid}
     .play-note{font-size:10.5px}
@@ -103,10 +119,19 @@
           <span class="section-tag">LIVE WEB BUILD</span>
           <h2 id="play-title">戰術終端</h2>
         </div>
-        <div class="status-list" aria-label="版本能力">
-          <span class="status-chip live">● 可直接遊玩</span>
-          <span class="status-chip">桌機鍵盤</span>
-          <span class="status-chip">手機觸控</span>
+        <div class="play-tools">
+          <div class="status-list" aria-label="版本能力">
+            <span class="status-chip live">● 可直接遊玩</span>
+            <span class="status-chip">桌機鍵盤</span>
+            <span class="status-chip">手機觸控</span>
+          </div>
+          <div class="display-controls" aria-label="遊戲畫面控制">
+            <span>畫面</span>
+            <button id="zoom-out" class="display-btn" type="button" aria-label="縮小遊戲畫面">−</button>
+            <output id="zoom-level" aria-live="polite">3×</output>
+            <button id="zoom-in" class="display-btn" type="button" aria-label="放大遊戲畫面">＋</button>
+            <button id="fullscreen-toggle" class="display-btn" type="button" aria-label="切換全螢幕" aria-pressed="false">全螢幕</button>
+          </div>
         </div>
       </div>
       <div class="game-viewport">

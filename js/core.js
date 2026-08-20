@@ -8,6 +8,8 @@ const Core = {
   cv: null, ctx: null,      // 像素畫面
   ucv: null, uctx: null,    // 中文覆蓋層（不做像素化，字才清楚）
   scale: 3,
+  preferredScale: null,
+  scaleStorageKey: 'stellar_commander_display_scale_v1',
   frame: 0,
 
   init() {
@@ -16,23 +18,47 @@ const Core = {
     this.ctx.imageSmoothingEnabled = false;
     this.ucv = document.getElementById('ui');
     this.uctx = this.ucv.getContext('2d');
+    this.preferredScale = this.loadPreferredScale();
+    this.bindDisplayControls();
     this.resize();
     window.addEventListener('resize', () => this.resize());
+    document.addEventListener('fullscreenchange', () => {
+      requestAnimationFrame(() => this.resize());
+    });
     Input.init();
   },
 
-  resize() {
+  loadPreferredScale() {
+    try {
+      const saved = Number.parseInt(localStorage.getItem(this.scaleStorageKey), 10);
+      return saved >= 1 && saved <= 5 ? saved : null;
+    } catch (e) {
+      return null;
+    }
+  },
+
+  bindDisplayControls() {
+    document.getElementById('zoom-out')?.addEventListener('click', () => this.stepScale(-1));
+    document.getElementById('zoom-in')?.addEventListener('click', () => this.stepScale(1));
+    document.getElementById('fullscreen-toggle')?.addEventListener('click', () => this.toggleFullscreen());
+  },
+
+  fitScale() {
     const host = document.querySelector('.game-viewport');
     const style = host ? getComputedStyle(host) : null;
     const hostInnerW = host
       ? host.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight)
       : window.innerWidth - 40;
-    // 以卡片內真正可用的寬度縮放，避免中間寬度在卡片邊界產生橫向溢出。
-    const maxW = Math.min(hostInnerW, 768);
-    const maxH = window.innerHeight - 300;
-    let s = Math.floor(Math.min(maxW / GW, Math.max(maxH, 300) / GH));
-    // 手機窄於 512px 時用原生 1 倍；仍是整數縮放，不會破壞像素邊緣。
-    s = Math.max(1, Math.min(5, s));
+    const hostInnerH = host
+      ? host.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom)
+      : window.innerHeight - 40;
+    const shell = document.querySelector('.play-card');
+    const maxH = document.fullscreenElement === shell ? hostInnerH : window.innerHeight - 300;
+    return Math.max(1, Math.min(5, Math.floor(Math.min(hostInnerW / GW, Math.max(maxH, 300) / GH))));
+  },
+
+  resize() {
+    const s = this.preferredScale || this.fitScale();
     this.scale = s;
     this.cv.style.width = (GW * s) + 'px';
     this.cv.style.height = (GH * s) + 'px';
@@ -40,6 +66,46 @@ const Core = {
     this.ucv.height = GH * s;
     this.ucv.style.width = (GW * s) + 'px';
     this.ucv.style.height = (GH * s) + 'px';
+    this.updateDisplayControls();
+  },
+
+  setScale(value) {
+    const next = Math.max(1, Math.min(5, Math.round(value)));
+    this.preferredScale = next;
+    try { localStorage.setItem(this.scaleStorageKey, String(next)); } catch (e) { /* 無痕模式仍可使用本次設定 */ }
+    this.resize();
+  },
+
+  stepScale(delta) {
+    this.setScale(this.scale + delta);
+  },
+
+  updateDisplayControls() {
+    const out = document.getElementById('zoom-level');
+    const minus = document.getElementById('zoom-out');
+    const plus = document.getElementById('zoom-in');
+    const fullscreen = document.getElementById('fullscreen-toggle');
+    if (out) out.textContent = `${this.scale}×`;
+    if (minus) minus.disabled = this.scale <= 1;
+    if (plus) plus.disabled = this.scale >= 5;
+    if (fullscreen) {
+      const active = document.fullscreenElement === document.querySelector('.play-card');
+      fullscreen.textContent = active ? '退出全螢幕' : '全螢幕';
+      fullscreen.setAttribute('aria-pressed', String(active));
+    }
+  },
+
+  async toggleFullscreen() {
+    const shell = document.querySelector('.play-card');
+    if (!shell) return;
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else await shell.requestFullscreen();
+      this.resize();
+    } catch (e) {
+      const button = document.getElementById('fullscreen-toggle');
+      if (button) button.title = '此瀏覽器目前不允許全螢幕';
+    }
   },
 
   clear(col) {

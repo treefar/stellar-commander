@@ -309,6 +309,7 @@ window.addEventListener('load', async () => {
   await ArtPack.init();
   Game.init();
   window.__game = Game;      // 測試鉤子
+  window.__core = Core;
   window.__strat = Strat;
   window.__battle = Battle;
   window.__artpack = ArtPack;

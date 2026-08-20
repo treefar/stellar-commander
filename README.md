@@ -20,6 +20,7 @@ node tools/devserver.mjs
 
 | 畫面 | 操作 |
 |---|---|
+| 顯示設定 | `−／＋` 切換 1～5 倍整數像素　`全螢幕` 切換瀏覽器全螢幕；倍率會自動保存 |
 | 戰略地圖 | `↑↓←→` 游標　`Z` 選擇　`X` 取消　`C` 系統選單 |
 | 即時戰鬥 | `↑↓←→` 推進　`Z` 武器1　`X` 軍刀　`C` 武器3　`V` 武器4　`Enter` 暫停 |
 
@@ -35,7 +36,7 @@ node tools/devserver.mjs
 
 ```
 index.html              入口，含中文操作說明
-js/core.js              256×224 畫布、整數放大、5×7 點陣字型、輸入、中文覆蓋層
+js/core.js              256×224 畫布、1～5 倍保存／全螢幕、5×7 點陣字型、輸入、中文覆蓋層
 js/sprites.js           正式 atlas 載入失敗時的 legacy 機體 fallback
 js/artpack.js           正式機體／背景／設施 atlas 與 manifest 載入器
 js/audio.js             Web Audio 合成音效與 BGM
@@ -63,8 +64,13 @@ node tests/run-tests.cjs
 node tests/balance.test.cjs
 ```
 
-前者驗六角格數學、地圖公平性、ZOC、傷害公式、機體表結構與長線成長（58 項）。
+```bash
+python tools/test-display-controls.py
+```
+
+前者驗六角格數學、地圖公平性、ZOC、傷害公式、機體表結構、正式美術契約與長線成長（73 項）。
 後者在 Node 用固定亂數種子跑模擬對戰，驗同階勝率與跨階壓制（22 項）。
+Playwright 顯示測試實際操作 1～5 倍、重載保存、Fullscreen API 與手機內框捲動。
 
 改過 `js/units.js` 或 `js/battle.js` 之後兩個都要跑。
 
