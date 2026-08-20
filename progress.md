@@ -36,6 +36,12 @@
 - Unity 6000.5.3f1 全新暫存專案 batchmode 退出碼 0：`PASS units=8 states=4 facilities=2x4 scenery=256x224`。
 - 工廠的角色型通用 motion scorer 為 85 分；因動畫刻意只動三盞燈，motion ratio 0.0070 低於角色預設 0.01。設施專用 `motion_min=0.005` 與人工 GIF／接觸表均通過，例外已寫入 `factory-v2/qa-notes.md`。
 
+## 2026-08-20 公開發布
+
+- 本作原生為 HTML／JavaScript Canvas 網頁遊戲，不需要 Unity WebGL 轉檔；已將可直接由瀏覽器執行的版本發布至 `https://treefar.link/stellar-commander/`。
+- GitHub Pages 已由 `main` 建置 commit `4768c15a8ec2aae858faa2dd8d70c4758d789fc4`，狀態 `built`。
+- 公開站 atlas、響應式與完整流程 smoke 全數通過：22 張圖片 HTTP 200、8 台機體、1 張場景、2 種設施各 4 幀，桌機／390px 手機無水平溢出，Console error 0。
+
 ## 後續品質升級
 
 1. 目前八台為四種配色陣營、同一量產機輪廓；下一版可生成高機動、重裝、王牌三套獨立 canonical，替換同職能色盤變體。
