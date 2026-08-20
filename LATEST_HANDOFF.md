@@ -11,7 +11,7 @@ status: published
 - 類型：原生 HTML／JavaScript Canvas 網頁遊戲；不是 Unity 專案，因此發布物就是瀏覽器版，不需另轉 Unity WebGL。
 - 公開網址：<https://treefar.link/stellar-commander/>
 - GitHub：<https://github.com/treefar/stellar-commander>
-- 已發布功能 commit：`4768c15a8ec2aae858faa2dd8d70c4758d789fc4`
+- 已發布功能 commit：`8b60ae9f7a9ff0b96110eb32fe916585188f4c79`
 
 ## 本輪完成
 
@@ -19,6 +19,7 @@ status: published
 - 兩種設施皆為 32×32 cell、4 FPS、4 幀指示燈循環；網頁與 Unity UPM package 共用同一 atlas／manifest 契約。
 - 戰略畫面優先使用正式 atlas，程序圖只保留載入失敗 fallback。
 - ImageGen／SpriteGen Prompt、日期、來源、SHA-256、QA 接觸表與人工核准例外均已留存。
+- 顯示控制支援 `−／＋` 手動 1～5 倍整數縮放、倍率保存與 Fullscreen API；超出螢幕時只捲動遊戲框，不造成整頁橫向溢出。
 
 ## 已驗證
 
@@ -27,6 +28,7 @@ status: published
 - 本機與公開站 atlas smoke：8 台機體、1 張場景、2 種設施各 4 幀，失敗 0。
 - 公開站桌機 1440px／手機 390px 響應式 smoke：22 張圖片成功、無水平溢出、Console error 0。
 - 公開站完整流程 smoke：進入戰略、任務獎勵、存檔還原、戰鬥結束與擊墜、觸控啟動／移動全通過。
+- 公開站顯示控制 smoke：1～5 倍尺寸逐筆正確、原始 backing 保持 256×224、倍率重載保存、全螢幕實際進出、手機 2 倍內框捲動全通過。
 - Unity 6000.5.3f1 全新暫存專案 batchmode：`PASS units=8 states=4 facilities=2x4 scenery=256x224`。
 
 ## 已知邊界與下一步
@@ -39,4 +41,4 @@ status: published
 
 1. 先讀 `progress.md`、`assets/artpack/COVERAGE.md` 與本檔。
 2. 修改正式美術時維持 ImageGen → SpriteGen → manifest → 網頁／Unity 雙端契約測試。
-3. 發布前執行 73 項功能契約、22 項平衡與公開站三套 browser smoke。
+3. 發布前執行 73 項功能契約、22 項平衡、`tools/test-display-controls.py` 與公開站 browser smoke。

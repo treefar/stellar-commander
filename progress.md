@@ -42,6 +42,14 @@
 - GitHub Pages 已由 `main` 建置 commit `4768c15a8ec2aae858faa2dd8d70c4758d789fc4`，狀態 `built`。
 - 公開站 atlas、響應式與完整流程 smoke 全數通過：22 張圖片 HTTP 200、8 台機體、1 張場景、2 種設施各 4 幀，桌機／390px 手機無水平溢出，Console error 0。
 
+## 2026-08-20 顯示控制補強
+
+- 新增 `−／＋` 手動 1～5 倍整數縮放；遊戲原始畫布固定 256×224，只調整 CSS 整數倍與中文 UI backing resolution，維持像素銳利。
+- 倍率保存於瀏覽器 `localStorage`，重載後沿用；超出視窗時只在遊戲框內捲動，不撐寬整頁。
+- 新增 Fullscreen API 按鈕，可實際進出全螢幕並同步按鈕文字／`aria-pressed`；已修正退出時狀態晚一幀更新的競態。
+- 功能 commit `8b60ae9f7a9ff0b96110eb32fe916585188f4c79` 已由 GitHub Pages 建置為 `built`。
+- 公開站 Playwright 實測 1～5 倍、4 倍重載保存、實際進出全螢幕、手機 2 倍保存與內框捲動全通過；完整戰略／存檔／戰鬥／觸控 smoke 仍全綠，Console error 0。
+
 ## 後續品質升級
 
 1. 目前八台為四種配色陣營、同一量產機輪廓；下一版可生成高機動、重裝、王牌三套獨立 canonical，替換同職能色盤變體。
